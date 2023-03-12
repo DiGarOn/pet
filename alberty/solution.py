@@ -23,8 +23,12 @@ import random
 # text1_5_1 = 'ЛИШЬ Я ОДИН, ГОРЯ, ЛЕЖУ ВО МГЛЕ,'
 
 
-def rotate_for(private_key):
-    return (private_key[-1] + private_key)[:32]
+def rotate_for(private_key, n = 1):
+    return (private_key[len(private_key)-n:] + private_key)[:32]
+
+
+def rotate_up(private_key, n = 1):
+    return private_key[n: ] + private_key[: n]
 
 
 def decript_mode_2(text, open_key, private_key):
@@ -89,7 +93,7 @@ def decript_mode_5(text, open_key, private_key, password):
     return res
 
 
-def encript_mode_1(text, open_key, private_key):
+def encript_mode_1(text, open_key, private_key, rotate_value = 1):
     while private_key[0] != text[0]:
         private_key = rotate_for(private_key)
     while open_key[0] != text[0]:
