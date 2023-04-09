@@ -1,28 +1,6 @@
 import random
 
 
-# open_key = "абвгдежзийклмнопрстуфхцчшщъыьэюя"
-# open_key = open_key.upper()
-# private_key = "КФЭНИЬСЯАТУБЫЛРВЩГЪДЕМЙЦПЧЖЮШЗОХ"
-#
-# text1_1 = "ТГСДУЖ ШМФ ПЮШЧМГ, ЪМЙДВАИШ А РЫАСТШЯШЛГ"
-# text1_1_1 = 'ТЫСЯЧИ ЛЕТ КОРОЛИ, КОРОЛЕВЫ И ПОЛКОВОДЦЫ'
-#
-# text1_2 = "ФВ Ч КЕЮВХМП ШПДПЭПДТ ТЯЫКЫЖЭ."
-# text1_2_1 = 'МЫ Ж ОГЛАСИМ СОКРЫТОЕ ЖЕЛАНЬЕ.'
-#
-# text1_3 = 'МЮР ЧКННЪО УМУ ЕЪЯШСЫУЗ ЫШБЛУ ЬЪНЖ,'
-# ind_1 = 'Г'
-# text_1_3_1 = 'ДЛЯ ЛУЧШИХ ВОД ПОДЪЕМЛЯ ПАРУС НЫНЕ,'
-#
-# text1_4 = 'ЧсонябЖауахшРоджлкЯмджеяЩцщегкУушшыпТъдцчцТеь'
-# text1_4_1 = 'НЕКОТОРОЕВРЕМЯТОМУНАЗАДБРАТТВОЙКОРОЛЬ'
-#
-# text1_5 = 'НСБЕ Н ЕТКБ, ЙСЕЬ, ЩЗИС ЖЪ ЪАНН,'
-# password = 'Подпись'.upper()
-# text1_5_1 = 'ЛИШЬ Я ОДИН, ГОРЯ, ЛЕЖУ ВО МГЛЕ,'
-
-
 def rotate_for(private_key, n = 1):
     return (private_key[len(private_key)-n:] + private_key)[:32]
 
@@ -109,9 +87,12 @@ def encript_mode_1(text, open_key, private_key, rotate_value = 1):
 
 
 def encript_mode_2(text, open_key, private_key):
-    while private_key[0] != text[0]:
-        private_key = rotate_for(private_key)
     res = ''
+    i = 0
+    while text[i] not in open_key:
+        i += 1
+    while private_key[0] != text[i]:
+        private_key = rotate_for(private_key)
     for letter in text:
         if (letter in private_key):
             res += private_key[open_key.find(letter)]
