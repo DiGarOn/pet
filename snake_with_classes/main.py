@@ -15,6 +15,7 @@ def game_loop(w: Window, f: Food, s: Snake):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     s.change_direction('left')
@@ -24,10 +25,11 @@ def game_loop(w: Window, f: Food, s: Snake):
                     s.change_direction('up')
                 elif event.key == pygame.K_DOWN:
                     s.change_direction('down')
-        if s.check_callaps(w):
-            pygame.quit() #
-        s.check_eat(f, w)
         w.update_window()
+        s.check_eat(f, w)
+        if s.check_collapse(w):
+            pygame.quit() #
+            exit()
 
 
 def main():

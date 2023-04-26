@@ -14,12 +14,12 @@ class Snake:
         self.size = 1
         self.direction = 'left'
 
-    def check_callaps(self, w: Window):
-        if (self.data[0][1] >= w.size_y) or (self.data[0][0] >= w.size_x) or (self.data[0][1] <= 0) or (self.data[0][0] <= 0):
+    def check_collapse(self, w: Window):
+        if (self.data[0][1] > w.size_y) or (self.data[0][0] > w.size_x) or (self.data[0][1] < 0) or (self.data[0][0] < 0):
             return True
-        for i in range(1, self.size):
-            if self.data[0][0] == self.data[i][0] and self.data[0][1] == self.data[i][1]:
-                return True
+            # if self.data[0][0] == self.data[i][0] and self.data[0][1] == self.data[i][1]:
+        if self.data[0] in self.data[1:]:
+            return True
         return False
 
     def check_eat(self, food: Food.Food, w: Window):
@@ -32,7 +32,8 @@ class Snake:
             self.data.append([])
 
         for i in range(self.size-1, 0, -1):
-            self.data[i] = self.data[i-1]
+            self.data[i] = self.data[i-1].copy()
+
         if self.direction == 'left':
             self.data[0][0] -= self.block_size
         elif self.direction == 'right':
