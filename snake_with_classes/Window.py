@@ -5,7 +5,7 @@ blue = (50, 153, 213)
 
  
 class Window:
-    def __init__(self, size_x=400, size_y=600):
+    def __init__(self, size_x=600, size_y=600):
         self.size_x = size_x
         self.size_y = size_y
         self.dis = pygame.display.set_mode((self.size_x, self.size_y))
