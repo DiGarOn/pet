@@ -1,0 +1,229 @@
+\documentclass[a4paper,14pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{titlesec}
+\usepackage{tabu}
+\usepackage{booktabs}% for better rules in the table
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{lscape}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage[landscape]{geometry}
+\usepackage{pgfplots}
+\usepackage{float}
+\geometry{left=2.5cm}
+\geometry{right=2.5cm}
+\geometry{top=2.5cm}
+\geometry{bottom=2.5cm}
+\pgfplotsset{compat=1.9}
+\usepackage{alphalph}
+
+%
+%
+%\parindent=0.75cm
+%
+\frenchspacing
+%\sloppy
+\hyphenpenalty=50
+
+\usepackage{array}
+\usepackage{makecell}
+\newcolumntype{x}[1]{>{\centering\arraybackslash}p{#1}}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{zref-savepos}
+
+\newcounter{DiagonalizedEntry}
+\renewcommand*{\theDiagonalizedEntry}{NTE-\the\value{DiagonalizedEntry}}
+
+\newcommand*{\diagonalize}[2]{%
+  \multicolumn{1}{@{}c@{}|}{%
+    \stepcounter{DiagonalizedEntry}%
+    \vadjust pre{\zsavepos{\theDiagonalizedEntry t}}% top
+    \vadjust{\zsavepos{\theDiagonalizedEntry b}}% bottom
+    \zsavepos{\theDiagonalizedEntry l}% left
+    \hspace{0pt plus 1filll}%
+    \zsavepos{\theDiagonalizedEntry r}% right
+    \tikz[overlay]{%
+      \draw[black]
+        let
+          \n{llx}={\zposx{\theDiagonalizedEntry l}sp-\zposx{\theDiagonalizedEntry r}sp}, % x left
+          \n{urx}={0}, % x right
+          \n{lly}={\zposy{\theDiagonalizedEntry b}sp-\zposy{\theDiagonalizedEntry r}sp}, % y bottom
+          \n{ury}={\zposy{\theDiagonalizedEntry t}sp-\zposy{\theDiagonalizedEntry r}sp} %  y top
+    in
+        (\n{llx}, \n{ury}) -- (\n{urx}, \n{lly})
+    node[anchor=south west] at (\n{llx}, \n{lly}) {#1}
+    node[anchor=north east] at (\n{urx}, \n{ury}) {#2}
+    ;
+    }% 
+  }%
+}
+
+%
+%---------------------------------------------------------------
+\newtheorem{theorem}{Теорема}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{utv}[theorem]{Утверждение}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{example}[theorem]{Пример}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{prop}[theorem]{Утверждение}
+%
+
+\newcommand*{\expect}{\mathsf{M}}
+\newcommand*{\prob}{\mathsf{P}}
+\newcommand{\eps}{\varepsilon}
+
+%\renewcommand{\tg}{\mbox{tg}\,}
+%\renewcommand{\ctg}{\mbox{ctg}\,}
+%\renewcommand{\arctg}{\mbox{arctg}\,}
+%\renewcommand{\arcctg}{\mbox{arcctg}\,}
+%\renewcommand{\arcsin}{\mbox{arcsin}\,}
+%\renewcommand{\arccos}{\mbox{arccos}\,}
+%\renewcommand{\sh}{\mbox{sh}\,}
+%\renewcommand{\ch}{\mbox{ch}\,}
+\title{Семинар по математическому анализу} 
+\author{А.Б. Чухно} 
+\newcommand{\thedate}{\today}
+\date{\thedate} 
+
+\newcounter{exercise}[section]
+\newenvironment{exercise}[1][]{\refstepcounter{exercise}\par\medskip
+%\noindent\makebox[\linewidth]{\rule{\textwidth}{2.25pt}}+
+   \noindent\textbf{Вариант~\theexercise. #1}\\
+   \noindent\makebox[\linewidth]{\rule{\textwidth}{1.25pt}}
+   }
+{\vspace{-2.5px}\mbox{}\newline \noindent\makebox[\linewidth]{\rule{\textwidth}{.5pt}}
+}
+
+\usepackage{verbatim}
+
+\newenvironment{solution}
+{\begin{proof}[\textbf{\textit{Решение}}]}
+  {\end{proof}}
+%\let\solution\comment
+%\let\endsolution\endcomment
+\def\ansrel{\mathrel{\stackrel{\mbox{почему?}}{=} }}
+
+\begin{document}
+\pagestyle{empty}
+
+
+\begin{center}
+    \textbf{Диск Альберти}
+\end{center}
+\begin{tikzpicture}
+
+
+\node[circle,thick,draw=black,fill=white,minimum size=14cm]() at (-2,-8) {};
+
+\node[circle,thick,draw=black,fill=white,minimum size=10cm]() at (11,-8) {};
+\foreach \j in {1,...,6}
+{
+    \pgfmathsetmacro{\jx}{-2+7*cos(11.25*\j) };
+    \pgfmathsetmacro{\jy}{-8+7*sin(11.25*\j) };
+    \pgfmathsetmacro{\jxx}{-2+6*cos(11.25*\j -5.625) };
+    \pgfmathsetmacro{\jyy}{-8+6*sin(11.25*\j-5.625) };
+    \pgfmathtruncatemacro{\jsy}{\j+223};
+    
+    \draw[-,thick](-2, -8) -- (\jx,\jy);
+    \node[]() at (\jxx,\jyy) {\symbol{\jsy}};
+}
+\foreach \j in {7,...,32}
+{
+    \pgfmathsetmacro{\jx}{-2+7*cos(11.25*\j) };
+    \pgfmathsetmacro{\jy}{-8+7*sin(11.25*\j) };
+    \pgfmathsetmacro{\jxx}{-2+6*cos(11.25*\j -5.625) };
+    \pgfmathsetmacro{\jyy}{-8+6*sin(11.25*\j-5.625) };
+    \pgfmathtruncatemacro{\jsy}{\j+223};
+    
+    \draw[-,thick](-2, -8) -- (\jx,\jy);
+    \node[]() at (\jxx,\jyy) {\symbol{\jsy}};
+}
+
+
+
+\foreach \j in {1,...,6}
+{
+    \pgfmathsetmacro{\jx}{11+5*cos(11.25*\j) };
+    \pgfmathsetmacro{\jy}{-8+5*sin(11.25*\j) };
+    
+    
+    \draw[-,thick](11, -8) -- (\jx,\jy);
+    
+}
+\foreach \j in {7,...,33}
+{
+    \pgfmathsetmacro{\jx}{11+5*cos(11.25*\j) };
+    \pgfmathsetmacro{\jy}{-8+5*sin(11.25*\j) };
+    
+    
+    \draw[-,thick](11, -8) -- (\jx,\jy);
+    
+}
+\end{tikzpicture}
+
+\newpage
+
+\begin{exercise}
+
+
+\textbf{\textit{Ключ к расшифрованияю:} К\,\, Ф \,\,Э\,\, Н\,\, И\,\, Ь\,\, С\,\, Я\,\, А\,\, Т\,\, У\,\, Б\,\, Ы\,\, Л\,\, Р\,\, В\,\, Щ\,\, Г\,\, Ъ\,\, Д\,\, Е\,\, М\,\, Й\,\, Ц\,\, П\,\, Ч\,\, Ж\,\, Ю\,\, Ш\,\, З\,\, О\,\, Х\,\,
+}
+
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{r l}
+      \textbf{Режим 1}   & ТГСДУЖ ШМФ ПЮШЧМГ, ЪМЙДВАИШ А РЫАСТШЯШЛГ
+ \\
+         \textbf{Режим 2}   & ФВ Ч КЕЮВХМП ШПДПЭПДТ ТЯЫКЫЖЭ.
+ \\
+         \textbf{Режим 3}   & Индикаторная буква: Ы \\
+
+& ВВВ ЛЮХР ДЬДЯДКЗЩ БДНДОЬДЮ \\
+         \textbf{Режим 4}   &  ШиояшлГнчнйшЯсдвжйЛзлвмхДпоъхдЩзщзщаУвъйт\\
+         \textbf{Режим 5}   & Пароль: Стеганография \\
+         & ЦПЭЮЙАБ, ДДЧСВ, С, ЯИЙГДГ, ЭЙЧЙЛ \\
+    \end{tabular}
+
+\end{table}
+
+
+\end{exercise}\begin{solution}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{r l}
+      \textbf{Режим 1}   & ТЫСЯЧИ ЛЕТ КОРОЛИ, КОРОЛЕВЫ И ПОЛКОВОДЦЫ
+
+ \\
+         \textbf{Режим 2}   & МЫ Ж ОГЛАСИМ СОКРЫТОЕ ЖЕЛАНЬЕ.
+
+ \\
+         \textbf{Режим 3}   & Индикаторная буква: Ы \\
+
+& ГДЕ ДУШИ ОБРЕТАЮТ ОЧИЩЕНЬЕ\\
+         \textbf{Режим 4}   &  и властителям, и управителям. А на наше имя\\
+         \textbf{Режим 5}   & Пароль: Стеганография \\
+         & СПОКОЕН, ВЕСЕЛ, Я, БЫВАЛО, ДЕЛОМ \\
+    \end{tabular}
+\end{table}
+
+
+
+
+
+\end{solution}
+
+
+\end{document}

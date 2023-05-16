@@ -1,0 +1,2607 @@
+\documentclass[a4paper,14pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{titlesec}
+\usepackage{tabu}
+\usepackage{booktabs}% for better rules in the table
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{lscape}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage[landscape]{geometry}
+\usepackage{pgfplots}
+\usepackage{float}
+\geometry{left=2.5cm}
+\geometry{right=2.5cm}
+\geometry{top=2.5cm}
+\geometry{bottom=2.5cm}
+\pgfplotsset{compat=1.9}
+\usepackage{alphalph}
+
+%
+%
+%\parindent=0.75cm
+%
+\frenchspacing
+%\sloppy
+\hyphenpenalty=50
+
+\usepackage{array}
+\usepackage{makecell}
+\newcolumntype{x}[1]{>{\centering\arraybackslash}p{#1}}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{zref-savepos}
+
+\newcounter{DiagonalizedEntry}
+\renewcommand*{\theDiagonalizedEntry}{NTE-\the\value{DiagonalizedEntry}}
+
+\newcommand*{\diagonalize}[2]{%
+  \multicolumn{1}{@{}c@{}|}{%
+    \stepcounter{DiagonalizedEntry}%
+    \vadjust pre{\zsavepos{\theDiagonalizedEntry t}}% top
+    \vadjust{\zsavepos{\theDiagonalizedEntry b}}% bottom
+    \zsavepos{\theDiagonalizedEntry l}% left
+    \hspace{0pt plus 1filll}%
+    \zsavepos{\theDiagonalizedEntry r}% right
+    \tikz[overlay]{%
+      \draw[black]
+        let
+          \n{llx}={\zposx{\theDiagonalizedEntry l}sp-\zposx{\theDiagonalizedEntry r}sp}, % x left
+          \n{urx}={0}, % x right
+          \n{lly}={\zposy{\theDiagonalizedEntry b}sp-\zposy{\theDiagonalizedEntry r}sp}, % y bottom
+          \n{ury}={\zposy{\theDiagonalizedEntry t}sp-\zposy{\theDiagonalizedEntry r}sp} %  y top
+    in
+        (\n{llx}, \n{ury}) -- (\n{urx}, \n{lly})
+    node[anchor=south west] at (\n{llx}, \n{lly}) {#1}
+    node[anchor=north east] at (\n{urx}, \n{ury}) {#2}
+    ;
+    }% 
+  }%
+}
+
+%
+%---------------------------------------------------------------
+\newtheorem{theorem}{Теорема}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{utv}[theorem]{Утверждение}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{example}[theorem]{Пример}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{prop}[theorem]{Утверждение}
+%
+
+\newcommand*{\expect}{\mathsf{M}}
+\newcommand*{\prob}{\mathsf{P}}
+\newcommand{\eps}{\varepsilon}
+
+%\renewcommand{\tg}{\mbox{tg}\,}
+%\renewcommand{\ctg}{\mbox{ctg}\,}
+%\renewcommand{\arctg}{\mbox{arctg}\,}
+%\renewcommand{\arcctg}{\mbox{arcctg}\,}
+%\renewcommand{\arcsin}{\mbox{arcsin}\,}
+%\renewcommand{\arccos}{\mbox{arccos}\,}
+%\renewcommand{\sh}{\mbox{sh}\,}
+%\renewcommand{\ch}{\mbox{ch}\,}
+\title{Семинар по математическому анализу} 
+\author{А.Б. Чухно} 
+\newcommand{\thedate}{\today}
+\date{\thedate} 
+
+\newcounter{exercise}[section]
+\newenvironment{exercise}[1][]{\refstepcounter{exercise}\par\medskip
+%\noindent\makebox[\linewidth]{\rule{\textwidth}{2.25pt}}+
+   \noindent\textbf{Вариант~\theexercise. #1}\\
+   \noindent\makebox[\linewidth]{\rule{\textwidth}{1.25pt}}
+   }
+{\vspace{-2.5px}\mbox{}\newline \noindent\makebox[\linewidth]{\rule{\textwidth}{.5pt}}
+}
+
+\usepackage{verbatim}
+
+\newenvironment{solution}
+{\begin{proof}[\textbf{\textit{Решение}}]}
+  {\end{proof}}
+%\let\solution\comment
+%\let\endsolution\endcomment
+\def\ansrel{\mathrel{\stackrel{\mbox{почему?}}{=} }}
+
+\begin{document}
+\pagestyle{empty}
+
+
+\begin{center}
+    \textbf{Диск Альберти}
+\end{center}
+\begin{tikzpicture}
+
+
+\node[circle,thick,draw=black,fill=white,minimum size=14cm]() at (-2,-8) {};
+
+\node[circle,thick,draw=black,fill=white,minimum size=10cm]() at (11,-8) {};
+\foreach \j in {1,...,6}
+{
+    \pgfmathsetmacro{\jx}{-2+7*cos(11.25*\j) };
+    \pgfmathsetmacro{\jy}{-8+7*sin(11.25*\j) };
+    \pgfmathsetmacro{\jxx}{-2+6*cos(11.25*\j -5.625) };
+    \pgfmathsetmacro{\jyy}{-8+6*sin(11.25*\j-5.625) };
+    \pgfmathtruncatemacro{\jsy}{\j+223};
+    
+    \draw[-,thick](-2, -8) -- (\jx,\jy);
+    \node[]() at (\jxx,\jyy) {\symbol{\jsy}};
+}
+\foreach \j in {7,...,32}
+{
+    \pgfmathsetmacro{\jx}{-2+7*cos(11.25*\j) };
+    \pgfmathsetmacro{\jy}{-8+7*sin(11.25*\j) };
+    \pgfmathsetmacro{\jxx}{-2+6*cos(11.25*\j -5.625) };
+    \pgfmathsetmacro{\jyy}{-8+6*sin(11.25*\j-5.625) };
+    \pgfmathtruncatemacro{\jsy}{\j+223};
+    
+    \draw[-,thick](-2, -8) -- (\jx,\jy);
+    \node[]() at (\jxx,\jyy) {\symbol{\jsy}};
+}
+
+
+
+\foreach \j in {1,...,6}
+{
+    \pgfmathsetmacro{\jx}{11+5*cos(11.25*\j) };
+    \pgfmathsetmacro{\jy}{-8+5*sin(11.25*\j) };
+    
+    
+    \draw[-,thick](11, -8) -- (\jx,\jy);
+    
+}
+\foreach \j in {7,...,33}
+{
+    \pgfmathsetmacro{\jx}{11+5*cos(11.25*\j) };
+    \pgfmathsetmacro{\jy}{-8+5*sin(11.25*\j) };
+    
+    
+    \draw[-,thick](11, -8) -- (\jx,\jy);
+    
+}
+\end{tikzpicture}
+
+\newpage
+
+\textbf{\textit{Ключ к расшифрованияю:} К\,\, Ф \,\,Э\,\, Н\,\, И\,\, Ь\,\, С\,\, Я\,\, А\,\, Т\,\, У\,\, Б\,\, Ы\,\, Л\,\, Р\,\, В\,\, Щ\,\, Г\,\, Ъ\,\, Д\,\, Е\,\, М\,\, Й\,\, Ц\,\, П\,\, Ч\,\, Ж\,\, Ю\,\, Ш\,\, З\,\, О\,\, Х\,\,}\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ХТПЯЩЦТДУАДИЩРЮ ЗАКАЦЯЯЕГБЙЧ ХШПАТ ЪЙШМЙГИЧУВЛЫЫС \\ 
+\textbf{Режим 2}  & ЦЧТДЗ ЩЩИЭРРЮШИЦМВЖЗ ИКЪОП ХЮРЧЕШЦЕЕЙЙХ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Р \\ 
+& ШОХИВЖЖТГИЭШУЙ ГКЫЛ ЩТУЬКЯИЦЕКЖЙ КВХШШЧЮЮПЯДУГБЯ \\ 
+\textbf{Режим 4}  & ЮнныутАдивйуМмэзжзЩзиокшЩщсппщ \\ 
+\textbf{Режим 5}  & Пароль: ВОЗНИКАЮЩИХ \\ 
+& ФОЯТТ ГЩЫЭТБУ РЭСЦБЩБОСХШСШ ЬЪЯМНЖИЗАСЪ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ХАРАКТЕРИЗУЕТСЯ ВОЗРАСТАЮЩЕЙ РОЛЬЮ ИНФОРМАЦИОННОЙ \\ 
+\textbf{Режим 2}  & СФЕРЫ ПРЕДСТАВЛЯЮЩЕЙ СОБОЙ СОВОКУПНОСТЬ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Р \\ 
+& ОСУЩЕСТВЛЯЮЩИХ СБОР ФОРМИРОВАНИЕ РАСПРОСТРАНЕНИЕ \\ 
+\textbf{Режим 4}  & И ИСПОЛЬЗОВАНИЕ ИНФОРМАЦИИ А \\ 
+\textbf{Режим 5}  & Пароль: ВОЗНИКАЮЩИХ \\ 
+& ТАКЖЕ СИСТЕМЫ РЕГУЛИРОВАНИЯ ВОЗНИКАЮЩИХ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ППВ НЦЪВ ЩЭЧИВВОКЯСДЫ ИЯФФУЙЗЦЦ. \\ 
+\textbf{Режим 2}  & ЫЩЙВЩБОДИТЯСПЙ ЯТЧНЪ ЩЪЖЛЫЗЯ ЮГЧЧБГЪГНГКСГЮМНС \\ 
+\textbf{Режим 3}  & Индикаторная буква: С \\ 
+& ЖЬРМЩГРБ ИЬНАЭ ЯЧЩЮССМЪ ГЖФЙВЧЧ \\ 
+\textbf{Режим 4}  & УымътЩмэзщРхшхкСеьдрСбмегУъшъфНаелгЙх \\ 
+\textbf{Режим 5}  & Пароль: ОБОРОННОЙ \\ 
+& ЮМЫЮЫВБМЮВМЫЦ ЫИГРИБПЫЦ С ЯДГЧСК \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПРИ ЭТОМ ОБЩЕСТВЕННЫХ ОТНОШЕНИЙ. \\ 
+\textbf{Режим 2}  & ИНФОРМАЦИОННАЯ СФЕРА ЯВЛЯЯСЬ СИСТЕМООБРАЗУЮЩИМ \\ 
+\textbf{Режим 2}  & Индикаторная буква: С \\ 
+& ФАКТОРОМ ЖИЗНИ ОБЩЕСТВА АКТИВНО \\ 
+\textbf{Режим 4}  & ВЛИЯЕТ НА СОСТОЯНИЕ ПОЛИТИЧЕСКОЙ \\ 
+\textbf{Режим 5}  & Пароль: ОБОРОННОЙ \\ 
+& ЭКОНОМИЧЕСКОЙ ОБОРОННОЙ И ДРУГИХ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СЭИИГЪЖЛБЬДХ УЛРЕЕИЕВВГГС ЛУЫБФФАКНЗ ЯЦММХРНЕД. \\ 
+\textbf{Режим 2}  & ЩЭЦАЛБЗЯЦЯЧЦ ПЮШЭЭЪЭЗЗХХА ЮПЖЧВВЙРГБ МЬННЛШГЭФ \\ 
+\textbf{Режим 3}  & Индикаторная буква: К \\ 
+& ГЪЦЭЛЛШОЬИГФ ЭЕЭГЦЗЖ ЕЫЛЪЖЩЧ ЕЦ \\ 
+\textbf{Режим 4}  & ГхъйэкЖхгхяэСьрджеЙсэйыоФвррвуДепжфэЩщфзофЕсшш \\ 
+\textbf{Режим 5}  & Пароль: ПРОГРЕССА \\ 
+& Ж НЫМД СБЮМКЬНЭПЭТЕ ЦАШФФДЬЦС \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СОСТАВЛЯЮЩИХ БЕЗОПАСНОСТИ РОССИЙСКОЙ ФЕДЕРАЦИИ. \\ 
+\textbf{Режим 2}  & НАЦИОНАЛЬНАЯ БЕЗОПАСНОСТЬ РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: К \\ 
+& СУЩЕСТВЕННЫМ ОБРАЗОМ ЗАВИСИТ ОТ \\ 
+\textbf{Режим 4}  & ОБЕСПЕЧЕНИЯ ИНФОРМАЦИОННОЙ БЕЗОПАСНОСТИ И \\ 
+\textbf{Режим 5}  & Пароль: ПРОГРЕССА \\ 
+& В ХОДЕ ТЕХНИЧЕСКОГО ПРОГРЕССА \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЭЙН ТФЭЯВЬАТББЕ ПТЧЧЬ ЕХЦХРООБШЬ. \\ 
+\textbf{Режим 2}  & ЯЬЖ ЗФЯКФШВИМЖПЦЦГ АБЫЪЪЭЪЛЛВВПЧ УЯТАООЬЗКЖ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Г \\ 
+& ЬМДДЗЫФЪГ ЦМДЛЩНЯДГО ВБЛЛАПЬХЮ ШЕЫЖУМШЮЮЗЗЪ \\ 
+\textbf{Режим 4}  & ОннбоесОыботжбЦъыхитшНдаегьь \\ 
+\textbf{Режим 5}  & Пароль: СОВОКУПНОСТЬЮ \\ 
+& РБНЫЩЙПЧСЕЙЪТВ ВННЩВ СЪРБЛУСЬШАСМЮЦ ЕЫАЦВРМБЗВЪСЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЭТА ЗАВИСИМОСТЬ БУДЕТ ВОЗРАСТАТЬ. \\ 
+\textbf{Режим 2}  & ПОД ИНФОРМАЦИОННОЙ БЕЗОПАСНОСТЬЮ РОССИЙСКОЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Г \\ 
+& ФЕДЕРАЦИИ ПОНИМАЕТСЯ СОСТОЯНИЕ ЗАЩИЩЕННОСТИ \\ 
+\textbf{Режим 4}  & ЕЕ НАЦИОНАЛЬНЫХ ИНТЕРЕСОВ В \\ 
+\textbf{Режим 5}  & Пароль: СОВОКУПНОСТЬЮ \\ 
+& ИНФОРМАЦИОННОЙ СФЕРЕ ОПРЕДЕЛЯЮЩИХСЯ СОВОКУПНОСТЬЮ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СМДЗГЗКЙЗЖЛУЙМЭЮ ЛГМЯГЬЩЫХ ЯНГССААЗ ЭЕБЙФФЩЛ \\ 
+\textbf{Режим 2}  & Ы СЩЪДНОЛЛЛШЧ. КИАЖИПНЫ ЮЦЬЖЖШШГ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ф \\ 
+& Н АЫЪБЫЯЖВКЬНЭЭШ НЬМХД ЕЫММЯХЯИЦМЭ \\ 
+\textbf{Режим 4}  & ТбчртеЙозйыоХятлыщМязяабОсыббчОдлрок \\ 
+\textbf{Режим 5}  & Пароль: ГРАЖДАНИНА \\ 
+& АДДАМЛЛИ Б БФРРОДМБГН МГ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СБАЛАНСИРОВАННЫХ ИНТЕРЕСОВ ЛИЧНОСТИ ОБЩЕСТВА \\ 
+\textbf{Режим 2}  & И ГОСУДАРСТВА. ИНТЕРЕСЫ ЛИЧНОСТИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ф \\ 
+& В ИНФОРМАЦИОННОЙ СФЕРЕ ЗАКЛЮЧАЮТСЯ \\ 
+\textbf{Режим 4}  & В РЕАЛИЗАЦИИ КОНСТИТУЦИОННЫХ ПРАВ \\ 
+\textbf{Режим 5}  & Пароль: ГРАЖДАНИНА \\ 
+& ЧЕЛОВЕКА И ГРАЖДАНИНА НА \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДШОООЧ Д ЩЕЖДЕВЭЦАЯ БЗ \\ 
+\textbf{Режим 2}  & ЫЕГВБЮЬБОЮЯФЗ ХНТЭНОГСЦЙ В ЕПШРПЫЦЬЧ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ч \\ 
+& ЯТУВЖЬЬЕШМШЙЫ ЧЩ ГТЦЦБОТЩВВТ СОЯУААЬ \\ 
+\textbf{Режим 4}  & РъдлкЪцзрхЕэьсшИпыбыЗеэряАйбйыЫхфжрИгъяъЫе \\ 
+\textbf{Режим 5}  & Пароль: РАЗВИТИЯ \\ 
+& ЙМВЕВЕТГКЮЗЖКЙЪУШ ПЗЙСГЙВЛ А ВВРВТ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДОСТУП К ИНФОРМАЦИИ НА \\ 
+\textbf{Режим 2}  & ИСПОЛЬЗОВАНИЕ ИНФОРМАЦИИ В ИНТЕРЕСАХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ч \\ 
+& ОСУЩЕСТВЛЕНИЯ НЕ ЗАПРЕЩЕННОЙ ЗАКОНОМ \\ 
+\textbf{Режим 4}  & ДЕЯТЕЛЬНОСТИ ФИЗИЧЕСКОГО ДУХОВНОГО И \\ 
+\textbf{Режим 5}  & Пароль: РАЗВИТИЯ \\ 
+& ИНТЕЛЛЕКТУАЛЬНОГО РАЗВИТИЯ А ТАКЖЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & В ДБНГЖЫ РЪПГЪЛКМСЬ УШХУЯШЛЗЙДЩУМП \\ 
+\textbf{Режим 2}  & ПЕЭЦШС АБЫЪЪЭЪЛЛВВП. НЯБЗЯЮСВ ФДУМККВЫ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Щ \\ 
+& Ъ ЦЮФЖЮЙТОВЕЪГГБ ЪЕИРЭ НЮИИЙРЙДСИГ \\ 
+\textbf{Режим 4}  & НьгиаеЙьюлюнПкккьуТрчржцЛвпмижНгемб \\ 
+\textbf{Режим 5}  & Пароль: УПРОЧЕНИИ \\ 
+& Ы МКЫЭ ЬЦТЕВ БЗРЯБАГЫЪ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & В ЗАЩИТЕ ИНФОРМАЦИИ ОБЕСПЕЧИВАЮЩЕЙ \\ 
+\textbf{Режим 2}  & ЛИЧНУЮ БЕЗОПАСНОСТЬ. ИНТЕРЕСЫ ОБЩЕСТВА \\ 
+\textbf{Режим 2}  & Индикаторная буква: Щ \\ 
+& В ИНФОРМАЦИОННОЙ СФЕРЕ ЗАКЛЮЧАЮТСЯ \\ 
+\textbf{Режим 4}  & В ОБЕСПЕЧЕНИИ ИНТЕРЕСОВ ЛИЧНОСТИ \\ 
+\textbf{Режим 5}  & Пароль: УПРОЧЕНИИ \\ 
+& В ЭТОЙ СФЕРЕ УПРОЧЕНИИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДДЧЖМЖТЖВР ЙЪУСФЛЯС ЫЫЮШЯЖЬЧН ЬФАЧЩЖУЖЖРП \\ 
+\textbf{Режим 2}  & ЕОКФГЫЮЮЮУЯ УДММУЯЬЫСЬ И УАЗШШСЮЕКЖЧ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Х \\ 
+& ЛХЙФЫЫЮЗИННЦФ НХДЖРОЕУ Ы ЛЮШЕЯГГР \\ 
+\textbf{Режим 4}  & ТцуйцберЭвууъщддЧффпфсбоГфйэыехэЖложубышВв \\ 
+\textbf{Режим 5}  & Пароль: ЗАКЛЮЧАЮТСЯ \\ 
+& Х ЩЛФТТЕЮХРМУМРЙ ЫЛЛБР ЛЯЯДОИЮЦЖЫА \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДЕМОКРАТИИ СОЗДАНИИ ПРАВОВОГО СОЦИАЛЬНОГО \\ 
+\textbf{Режим 2}  & ГОСУДАРСТВА ДОСТИЖЕНИИ И ПОДДЕРЖАНИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Х \\ 
+& ОБЩЕСТВЕННОГО СОГЛАСИЯ В ДУХОВНОМ \\ 
+\textbf{Режим 4}  & ОБНОВЛЕНИИ РОССИИ. ИНТЕРЕСЫ ГОСУДАРСТВА \\ 
+\textbf{Режим 5}  & Пароль: ЗАКЛЮЧАЮТСЯ \\ 
+& В ИНФОРМАЦИОННОЙ СФЕРЕ ЗАКЛЮЧАЮТСЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & В ЗЧГЛАЕРЛ ЦЕЛВЭЯЯ ФЯЖ \\ 
+\textbf{Режим 2}  & ЕЩХЖЮЧДФЙЙУЕ МИУИТЪЯЗ ЛУЫБФФАКНЗ ЮХЬОХЖЛЭДПЙММВ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Р \\ 
+& ЙЖКЮУЖЖЦЧВЙЙЪШ ИУЗ ЛФЮЬФХЦЫЗШ ЗКОФФЙХХФЪЦМЕФЖ \\ 
+\textbf{Режим 4}  & ЧатчюфИмсъьъМчыжкнИстри \\ 
+\textbf{Режим 5}  & Пароль: ОБЛАСТИ \\ 
+& С РЗАЫЛИБДЖА А ЦЬТБОЖР \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & В СОЗДАНИИ УСЛОВИЙ ДЛЯ \\ 
+\textbf{Режим 2}  & ГАРМОНИЧНОГО РАЗВИТИЯ РОССИЙСКОЙ ИНФОРМАЦИОННОЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Р \\ 
+& ИНФРАСТРУКТУРЫ ДЛЯ РЕАЛИЗАЦИИ КОНСТИТУЦИОННЫХ \\ 
+\textbf{Режим 4}  & ПРАВ И СВОБОД ЧЕЛОВЕКА \\ 
+\textbf{Режим 5}  & Пароль: ОБЛАСТИ \\ 
+& И ГРАЖДАНИНА В ОБЛАСТИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПЙЪЧШТЩУК АЫЪБЫЯЖВКХ О ИЭОРПОГРЖЕУ \\ 
+\textbf{Режим 2}  & ЧГ Е ЯМЖЛЭ ЖЫВЖЦЫЗУГБФ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Б \\ 
+& ПВЩНАГУЩГДДА ТЫУЛЛЭББЛОНФККЕО ККЗЖУ ЮШУЫЙУГБЕСЪХ \\ 
+\textbf{Режим 4}  & НбмаддбмТцчгтеьйФвуцсывъЕсфэьсшиЧяууфф \\ 
+\textbf{Режим 5}  & Пароль: СОЦИАЛЬНОЙ \\ 
+& МЫЭЫЖМШАВКЕЯ ЕРЙЖДВСЛБВФЪГ М ЙГЕОСТДГЙЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПОЛУЧЕНИЯ ИНФОРМАЦИИ И ПОЛЬЗОВАНИЯ \\ 
+\textbf{Режим 2}  & ЕЮ В ЦЕЛЯХ ОБЕСПЕЧЕНИЯ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Б \\ 
+& НЕЗЫБЛЕМОСТИ КОНСТИТУЦИОННОГО СТРОЯ СУВЕРЕНИТЕТА \\ 
+\textbf{Режим 4}  & И ТЕРРИТОРИАЛЬНОЙ ЦЕЛОСТНОСТИ РОССИИ \\ 
+\textbf{Режим 5}  & Пароль: СОЦИАЛЬНОЙ \\ 
+& ПОЛИТИЧЕСКОЙ ЭКОНОМИЧЕСКОЙ И СОЦИАЛЬНОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ССДДЧЮБЮЮЗЗЪ Б ТЫЛПМРЩНЛЛУ БЗКБАЗРЮЭШЮ \\ 
+\textbf{Режим 2}  & ИШЬАСЬЬЯЯШ Ю ФФЩГШШЖЮТЛЪЯ ЙЬБЬУДАЯ \\ 
+\textbf{Режим 3}  & Индикаторная буква: У \\ 
+& ЖТУЕЕЕЕНИРРЭЫ Ь ОЭЖФИЬПЩЦФЙООЪШ ЧГГРШМЯЙДАЩЩИР \\ 
+\textbf{Режим 4}  & ФъвдгеьрЪжтцниеъВршвзкшзЬяуъьюлдЫчыцачяф \\ 
+\textbf{Режим 5}  & Пароль: ФЕДЕРАЦИИ \\ 
+& ТФЬЧОЛАЪС ГЭИЬЙГАРЪУ АППДПЦЖЫТ Й \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СТАБИЛЬНОСТИ В БЕЗУСЛОВНОМ ОБЕСПЕЧЕНИИ \\ 
+\textbf{Режим 2}  & ЗАКОННОСТИ И ПРАВОПОРЯДКА РАЗВИТИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: У \\ 
+& РАВНОПРАВНОГО И ВЗАИМОВЫГОДНОГО МЕЖДУНАРОДНОГО \\ 
+\textbf{Режим 4}  & СОТРУДНИЧЕСТВА. НА ОСНОВЕ НАЦИОНАЛЬНЫХ \\ 
+\textbf{Режим 5}  & Пароль: ФЕДЕРАЦИИ \\ 
+& ИНТЕРЕСОВ РОССИЙСКОЙ ФЕДЕРАЦИИ В \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАРЯАНЙБШФХООП ХФГЮВ ЗЙЦЪЛЕЙКДГО ВВЫЮЫОЮХЛЖЬЗЖЙ \\ 
+\textbf{Режим 2}  & Ы МЯБДПСЭ НЮОЧВХ ПЭЯЬЭЙЗШДЙ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Щ \\ 
+& П ГЮЪИПВЪ ЦМГЛЙБЫТ НЛВЩКЮУУУЧЙ \\ 
+\textbf{Режим 4}  & УчппбвюЗыэеэуьЧцфслятИщижыъгОбыяхньЕэнеьфэЬйцли \\ 
+\textbf{Режим 5}  & Пароль: СОСТАВЛЯЮЩИЕ \\ 
+& АЧУРДРБЧЫВ ЮЧПЧЙР ЙКЖМЗЗХЧ ЦЫЦЮАГПСЧТЫЧ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНФОРМАЦИОННОЙ СФЕРЕ ФОРМИРУЮТСЯ СТРАТЕГИЧЕСКИЕ \\ 
+\textbf{Режим 2}  & И ТЕКУЩИЕ ЗАДАЧИ ВНУТРЕННЕЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Щ \\ 
+& И ВНЕШНЕЙ ПОЛИТИКИ ГОСУДАРСТВА \\ 
+\textbf{Режим 4}  & ПО ОБЕСПЕЧЕНИЮ ИНФОРМАЦИОННОЙ БЕЗОПАСНОСТИ. \\ 
+\textbf{Режим 5}  & Пароль: СОСТАВЛЯЮЩИЕ \\ 
+& ВЫДЕЛЯЮТСЯ ЧЕТЫРЕ ОСНОВНЫЕ СОСТАВЛЯЮЩИЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НМУЮКОЩЖУЖЯК ЪЙЖЫЙУМГИ ГРЩВЬЬЫИЯФ БЮЧЧНЪЯПЦ \\ 
+\textbf{Режим 2}  & Г ЙЖКЧЖМАЗРДГЩЩУ ГДНЛФ. УХТЖЦМ \\ 
+\textbf{Режим 3}  & Индикаторная буква: У \\ 
+& ЮЦЧЧСЯВЭКЖКО БЗЪНАСПЭЪЭВА ЖОЭЕОЪЗЧЫ ЧЙПЦЛЛЕЫВТ \\ 
+\textbf{Режим 4}  & АшлылпаЗдььхьуЪскэоъаВцзшшзпАчшлпл \\ 
+\textbf{Режим 5}  & Пароль: СОБЛЮДЕНИЕ \\ 
+& ААЙБЪДЧМ С ЬБХУ ОТЕХФАЧДСЩ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НАЦИОНАЛЬНЫХ ИНТЕРЕСОВ РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+\textbf{Режим 2}  & В ИНФОРМАЦИОННОЙ СФЕРЕ. ПЕРВАЯ \\ 
+\textbf{Режим 2}  & Индикаторная буква: У \\ 
+& СОСТАВЛЯЮЩАЯ НАЦИОНАЛЬНЫХ ИНТЕРЕСОВ РОССИЙСКОЙ \\ 
+\textbf{Режим 4}  & ФЕДЕРАЦИИ В ИНФОРМАЦИОННОЙ СФЕРЕ \\ 
+\textbf{Режим 5}  & Пароль: СОБЛЮДЕНИЕ \\ 
+& ВКЛЮЧАЕТ В СЕБЯ СОБЛЮДЕНИЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & КНФИИЧЭЭИМЖПЦИЗ ЙЙЬС Б ДНРКЫФ \\ 
+\textbf{Режим 2}  & ЩЗЭИЦЧЗЪ Ч ДХРДЩБЦГМЯ А \\ 
+\textbf{Режим 3}  & Индикаторная буква: Л \\ 
+& ЮЛЙУЖЖВ МДВЙЧСЛЯЗ ЬТВАТИЦЫЗШ Ю \\ 
+\textbf{Режим 4}  & МинкгшнЮзюанжкХзлкищрАлхлмщлКидмрэлЙичи \\ 
+\textbf{Режим 5}  & Пароль: СОХРАНЕНИЕ \\ 
+& ЕХЫШУРЧЩЫД ЙЫЩХЩБ ЬГЧИСБИЮЩА Ш \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & КОНСТИТУЦИОННЫХ ПРАВ И СВОБОД \\ 
+\textbf{Режим 2}  & ЧЕЛОВЕКА И ГРАЖДАНИНА В \\ 
+\textbf{Режим 2}  & Индикаторная буква: Л \\ 
+& ОБЛАСТИ ПОЛУЧЕНИЯ ИНФОРМАЦИИ И \\ 
+\textbf{Режим 4}  & ПОЛЬЗОВАНИЯ ЕЮ ОБЕСПЕЧЕНИЕ ДУХОВНОГО \\ 
+\textbf{Режим 5}  & Пароль: СОХРАНЕНИЕ \\ 
+& ОБНОВЛЕНИЯ РОССИИ СОХРАНЕНИЕ И \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & УКЬЧЭЗЙЗЦД ЖШБЫЖЖТБЪГОЦ ЦЬЫББЛЛХЭ СПВЖЬЬЕГ \\ 
+\textbf{Режим 2}  & ЮПЯУЛЖББ ЩКГРЬУЛЭКИЦ О ПЯХЪОПЙЖЛ \\ 
+\textbf{Режим 3}  & Индикаторная буква: С \\ 
+& ЩПВХЕЕЩЫЫКУ Н ЯЧБРННЦФ ФХЭЕЮНЕБМТ \\ 
+\textbf{Режим 4}  & ГэнфгоЧепзипИаъмйыОинбсзМъянпн \\ 
+\textbf{Режим 5}  & Пароль: ИСПОЛЬЗОВАНИЯ \\ 
+& ЙЙЗХКУВВР ЦГСЭМРУЖ УЧГНЧЖБСЕЪЦУЖ МЙЫЫЖИУЪТИДКЗ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & УКРЕПЛЕНИЕ НРАВСТВЕННЫХ ЦЕННОСТЕЙ ОБЩЕСТВА \\ 
+\textbf{Режим 2}  & ТРАДИЦИЙ ПАТРИОТИЗМА И ГУМАНИЗМА \\ 
+\textbf{Режим 2}  & Индикаторная буква: С \\ 
+& КУЛЬТУРНОГО И НАУЧНОГО ПОТЕНЦИАЛА \\ 
+\textbf{Режим 4}  & СТРАНЫ. ДЛЯ ДОСТИЖЕНИЯ ЭТОГО \\ 
+\textbf{Режим 5}  & Пароль: ИСПОЛЬЗОВАНИЯ \\ 
+& ТРЕБУЕТСЯ ПОВЫСИТЬ ЭФФЕКТИВНОСТЬ ИСПОЛЬЗОВАНИЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАРЯАНЙБШФХООП ЙЖКЮУЖЖЦЧВЙЙЪШ Э ЯБВФБХУПЫ \\ 
+\textbf{Режим 2}  & ЫОМКББЖШНЭЭЙК ФЩЙЩМОДТ ДЙЕЦДВБСФЙЯС ЛУЫБФФАКНЦФ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Й \\ 
+& ИЙЛПННЪВ ЪКФЧЫЙЙУЕ ЯЪУЪВСННУИЖ СССЖИЭЕТЖХЗВЧТЧЧЛЦ \\ 
+\textbf{Режим 4}  & МэмьнчНндгееВцпкчзДшяпцпЕиеушшОгвыкнЛзьъжоАжуйуаПуе \\ 
+\textbf{Режим 5}  & Пароль: СОХРАНЕНИЯ \\ 
+& ЦСЩКЛВЯ ЦЪЦЪСВШУНФБН ПЕДВРМАФБН В \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНФОРМАЦИОННОЙ ИНФРАСТРУКТУРЫ В ИНТЕРЕСАХ \\ 
+\textbf{Режим 2}  & ОБЩЕСТВЕННОГО РАЗВИТИЯ КОНСОЛИДАЦИИ РОССИЙСКОГО \\ 
+\textbf{Режим 2}  & Индикаторная буква: Й \\ 
+& ОБЩЕСТВА ДУХОВНОГО ВОЗРОЖДЕНИЯ МНОГОНАЦИОНАЛЬНОГО \\ 
+\textbf{Режим 4}  & НАРОДА РОССИЙСКОЙ ФЕДЕРАЦИИ УСОВЕРШЕНСТВОВАТЬ \\ 
+\textbf{Режим 5}  & Пароль: СОХРАНЕНИЯ \\ 
+& СИСТЕМУ ФОРМИРОВАНИЯ СОХРАНЕНИЯ И \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СЭИИГЪЖЛБЬДХ ЦЧЕЕЯЦ ЩЭЕЦЫЫ-ВФЩЯФВШЯХЭЙК Ч \\ 
+\textbf{Режим 2}  & ЦЬСОГЮЮВЧ ЧЦЖЫДЮЫНЛФ ЩЛВРИИБНСК УЖППЭГСЦЙ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Е \\ 
+& ЭЕЦЭХЕЬМОЯ ЕЦМППЛЙЙПТРЫБПФ УУЧЖЦ О \\ 
+\textbf{Режим 4}  & ИмсъьъНяожарМнцжхмЫевшыъВдвшцшЧч \\ 
+\textbf{Режим 5}  & Пароль: ПЕРЕДАВАТЬ \\ 
+& ТЙШМФЫШЙ ГЙЭЕКЩ ЭЙЖЮКЬУЩ ЗЧНЛДАБЬУЩ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СОСТАВЛЯЮЩИХ ОСНОВУ НАУЧНО-ТЕХНИЧЕСКОГО И \\ 
+\textbf{Режим 2}  & ДУХОВНОГО ПОТЕНЦИАЛА РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Е \\ 
+& ОБЕСПЕЧИТЬ КОНСТИТУЦИОННЫЕ ПРАВА И \\ 
+\textbf{Режим 4}  & СВОБОДЫ ЧЕЛОВЕКА И ГРАЖДАНИНА \\ 
+\textbf{Режим 5}  & Пароль: ПЕРЕДАВАТЬ \\ 
+& СВОБОДНО ИСКАТЬ ПОЛУЧАТЬ ПЕРЕДАВАТЬ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ППМРЫСГСТЪЮ С ЛШЫТТСААЬЕКГНЫ ЦЮФЖЮЙТОВИ \\ 
+\textbf{Режим 2}  & ПУЫЬМ ВЯЩДГЩЗЛ ГРЫРУШАЬ ЯЬФАБДИЛ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ж \\ 
+& ОЯТТИЦЧНХИР ЦЮФЖЮЙТОВИ Д МГДДРОБЬИ \\ 
+\textbf{Режим 4}  & ЙикстшБбтищеБшющвсЫжлгзюЮкънлцАъймчжЙоатыоЙиннгю \\ 
+\textbf{Режим 5}  & Пароль: ЧЕЛОВЕКА \\ 
+& АИЛКВ Ш ГУЯМЮЭУ БЬДЯЙЪАВ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПРОИЗВОДИТЬ И РАСПРОСТРАНЯТЬ ИНФОРМАЦИЮ \\ 
+\textbf{Режим 2}  & ЛЮБЫМ ЗАКОННЫМ СПОСОБОМ ПОЛУЧАТЬ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ж \\ 
+& ДОСТОВЕРНУЮ ИНФОРМАЦИЮ О СОСТОЯНИИ \\ 
+\textbf{Режим 4}  & ОКРУЖАЮЩЕЙ СРЕДЫ ОБЕСПЕЧИТЬ КОНСТИТУЦИОННЫЕ \\ 
+\textbf{Режим 5}  & Пароль: ЧЕЛОВЕКА \\ 
+& ПРАВА И СВОБОДЫ ЧЕЛОВЕКА \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И ОУЧОЮЙЭШКЪ ОЩ ЖЙИЧОА \\ 
+\textbf{Режим 2}  & Ы ЕЯЛЬАБЩЖ ЛЖЭЬУ АМЗКЬ \\ 
+\textbf{Режим 3}  & Индикаторная буква: С \\ 
+& МУЕАГТГТС ВФСХЛСИНЩТ ЭЦФМЪШВЖЮПБ ЦМЗЦЪЬЗЙ \\ 
+\textbf{Режим 4}  & ЗвэаэкУжуоцьОдссбчТожццуЦщшихк \\ 
+\textbf{Режим 5}  & Пароль: ЧЕЛОВЕКА \\ 
+& СЕ ЕОАШЪЮ УЙЮНП БЬЧБШ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И ГРАЖДАНИНА НА ЛИЧНУЮ \\ 
+\textbf{Режим 2}  & И СЕМЕЙНУЮ ТАЙНУ ТАЙНУ \\ 
+\textbf{Режим 2}  & Индикаторная буква: С \\ 
+& ПЕРЕПИСКИ ТЕЛЕФОННЫХ ПЕРЕГОВОРОВ ПОЧТОВЫХ \\ 
+\textbf{Режим 4}  & ТЕЛЕГРАФНЫХ И ИНЫХ СООБЩЕНИЙ \\ 
+\textbf{Режим 5}  & Пароль: ЧЕЛОВЕКА \\ 
+& НА ЗАЩИТУ СВОЕЙ ЧЕСТИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И ЫШЯЗЖИ ЧЭЕЭХДЗ ЙЧГПЪ \\ 
+\textbf{Режим 2}  & ЗДПЫМЛЙХ РСМХБЬНЯМ ААЦПНЙФМХ КЕГКЦДЖЦУЯДЛН \\ 
+\textbf{Режим 3}  & Индикаторная буква: Е \\ 
+& ЭЬХХАЕЮММ Л ПУДЯЦЦЫ ГЦГКЫЧ \\ 
+\textbf{Режим 4}  & ТгйюреерНлмйнрхщВзпкзщкфЫргччжзоСрцелуспЦдуаэьчхСь \\ 
+\textbf{Режим 5}  & Пароль: ФЕДЕРАЛЬНЫМ \\ 
+& ЬХЪ ЬШТПНЯГЭТД СЬКАЖДЬЦЖРФРТ ЭЛГУДЫКЗФРК \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И СВОЕГО ДОБРОГО ИМЕНИ \\ 
+\textbf{Режим 2}  & УКРЕПИТЬ МЕХАНИЗМЫ ПРАВОВОГО РЕГУЛИРОВАНИЯ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Е \\ 
+& ОТНОШЕНИЙ В ОБЛАСТИ ОХРАНЫ \\ 
+\textbf{Режим 4}  & ИНТЕЛЛЕКТУАЛЬНОЙ СОБСТВЕННОСТИ СОЗДАТЬ УСЛОВИЯ \\ 
+\textbf{Режим 5}  & Пароль: ФЕДЕРАЛЬНЫМ \\ 
+& ДЛЯ СОБЛЮДЕНИЯ УСТАНОВЛЕННЫХ ФЕДЕРАЛЬНЫМ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЗМОФХХЕВКЪЦЯЮЮУМЪ ДЯДЭРАЙНУИИ ЯЧ ШЬЯЯЯЭ \\ 
+\textbf{Режим 2}  & У ТЫУЩНООЬЛОМХВХХЧ ЦЮФЖЮЙТОВР АИДЭРЪЯРБОЮЫМ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ц \\ 
+& АПНМФЙИ ШВХОЖЛПЪ ЩЕЖДЕВЭЦАЯ С \\ 
+\textbf{Режим 4}  & ПхпяазурШфтнвыцтПзшсябтэТтюь \\ 
+\textbf{Режим 5}  & Пароль: КОТОРЫЕ \\ 
+& ВРЦЛРВЕЛЭШ С РВШЪОХСЫ ЙЭЪЫЧЧД \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЗАКОНОДАТЕЛЬСТВОМ ОГРАНИЧЕНИЙ НА ДОСТУП \\ 
+\textbf{Режим 2}  & К КОНФИДЕНЦИАЛЬНОЙ ИНФОРМАЦИИ ГАРАНТИРОВАТЬ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ц \\ 
+& СВОБОДУ МАССОВОЙ ИНФОРМАЦИИ И \\ 
+\textbf{Режим 4}  & ЗАПРЕТ ЦЕНЗУРЫ НЕ ДОПУСКАТЬ \\ 
+\textbf{Режим 5}  & Пароль: КОТОРЫЕ \\ 
+& ПРОПАГАНДУ И АГИТАЦИЮ КОТОРЫЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СНФНХГККВХТШ ЧАРЫЛЯНВТО ЩЫДИЮЬМЬЬХ ЬЕИКДОП \\ 
+\textbf{Режим 2}  & ЩЭЦАЛБЗЯЦЯЯФ ХФЗ ИПЗЧДЦШЕЧЧД ЙЛЕСЯЫЕЕТ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Е \\ 
+& Ш МЭГЙДТ ЮЛЩЮПЛОРЦК УЭЩЩИЩ \\ 
+\textbf{Режим 4}  & ЭвэднщъцШыштфтифЬлйедщфыКрэклаь \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИИ \\ 
+& Ы ДФВЗЬЙАЙЕИЩСБЙЖ ЩИПЪЕВФЕЙЗ Й \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СПОСОБСТВУЮТ РАЗЖИГАНИЮ СОЦИАЛЬНОЙ РАСОВОЙ \\ 
+\textbf{Режим 2}  & НАЦИОНАЛЬНОЙ ИЛИ РЕЛИГИОЗНОЙ НЕНАВИСТИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Е \\ 
+& И ВРАЖДЫ ОБЕСПЕЧИТЬ ЗАПРЕТ \\ 
+\textbf{Режим 4}  & НА СБОР ХРАНЕНИЕ ИСПОЛЬЗОВАНИЕ \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИИ \\ 
+& И РАСПРОСТРАНЕНИЕ ИНФОРМАЦИИ О \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЧФГГББЬ ФЭКЬХ ФЗУД ДЙЦ \\ 
+\textbf{Режим 2}  & ЧЙК ЭОЪЧЛЗДТ Г ЫЦЧАЪЫ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Э \\ 
+& УРЕЛРТШГЭФ ШЬЯЯЯЭ Ш ЮОФШЗЖЕ \\ 
+\textbf{Режим 4}  & МнпьмЖяэгхСджбуТрчтеПеьдиЪчъшкХылнхНмархСцпаеМфецяБчюбу \\ 
+\textbf{Режим 5}  & Пароль: РОССИЙСКОЙ \\ 
+& ХЫЦПИПГХШВРЗ ДСЖОЕЛОФУБФЮ ЫНПЬРЮХЫА ЙЪЯЦАЯЯПЫВ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЧАСТНОЙ ЖИЗНИ ЛИЦА БЕЗ \\ 
+\textbf{Режим 2}  & ЕГО СОГЛАСИЯ И ДРУГОЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Э \\ 
+& ИНФОРМАЦИИ ДОСТУП К КОТОРОЙ \\ 
+\textbf{Режим 4}  & ОГРАНИЧЕН ФЕДЕРАЛЬНЫМ ЗАКОНОДАТЕЛЬСТВОМ. ВТОРАЯ \\ 
+\textbf{Режим 5}  & Пароль: РОССИЙСКОЙ \\ 
+& СОСТАВЛЯЮЩАЯ НАЦИОНАЛЬНЫХ ИНТЕРЕСОВ РОССИЙСКОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ФГВВЧАЗРЛ С БВМРВУЗЪНАСЬЬХ САПЭЙ \\ 
+\textbf{Режим 2}  & ГППУЭУРЖ Т ЦУЬЭ УРЕЛРТШГЭЯЬИИЖ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Л \\ 
+& ЮЛЩЮПЛОБЪЫА ЬВГЪЭЗЫЫЫЮЗИННЗ ЭКШПФЙЦЕ ЮПЖЧВВЙРГБ \\ 
+\textbf{Режим 4}  & ЮвкхкбЧчвффуБлуъбпЭвщядсЯмтыбыПькзи \\ 
+\textbf{Режим 5}  & Пароль: МЕЖДУНАРОДНОЙ \\ 
+& ЧЭ УФЮЕЩЦВЗГЯ О ФЧКЦЗЩАОЫЦЩЫХ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ФЕДЕРАЦИИ В ИНФОРМАЦИОННОЙ СФЕРЕ \\ 
+\textbf{Режим 2}  & ВКЛЮЧАЕТ В СЕБЯ ИНФОРМАЦИОННОЕ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Л \\ 
+& ОБЕСПЕЧЕНИЕ ГОСУДАРСТВЕННОЙ ПОЛИТИКИ РОССИЙСКОЙ \\ 
+\textbf{Режим 4}  & ФЕДЕРАЦИИ СВЯЗАННОЕ С ДОВЕДЕНИЕМ \\ 
+\textbf{Режим 5}  & Пароль: МЕЖДУНАРОДНОЙ \\ 
+& ДО РОССИЙСКОЙ И МЕЖДУНАРОДНОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОЩЯЪЗЗЫРМЕЕЙЙБ СВГГЫХФБЯЯФ ХНТЭНОГСЦЙ Ю \\ 
+\textbf{Режим 2}  & ЕОКФГЫЮЮЮУЫДЪЪЫ ГВБЯЩЬСК УЯТАООЬЗКЖ ИЕЪЪШБКГЩ \\ 
+\textbf{Режим 3}  & Индикаторная буква: П \\ 
+& ЗШ ИТШТЖГЮБЮЮМ ЖПЩЩЗРЛ ДГ \\ 
+\textbf{Режим 4}  & ЭдщпуэКбшлряЭвэчурЬкгйдсСфпрьъАпйччщТъждцъ \\ 
+\textbf{Режим 5}  & Пароль: МЕЖДУНАРОДНОЙ \\ 
+& З КХЧРЙМРРФЯБИО ЖЭЖЦБ Ч \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОБЩЕСТВЕННОСТИ ДОСТОВЕРНОЙ ИНФОРМАЦИИ О \\ 
+\textbf{Режим 2}  & ГОСУДАРСТВЕННОЙ ПОЛИТИКЕ РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: П \\ 
+& ЕЕ ОФИЦИАЛЬНОЙ ПОЗИЦИИ ПО \\ 
+\textbf{Режим 4}  & СОЦИАЛЬНО ЗНАЧИМЫМ СОБЫТИЯМ РОССИЙСКОЙ \\ 
+\textbf{Режим 5}  & Пароль: МЕЖДУНАРОДНОЙ \\ 
+& И МЕЖДУНАРОДНОЙ ЖИЗНИ С \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОЩДОЮЩФРМВБГ АГДДДРО КЫЮКЗПИ К \\ 
+\textbf{Режим 2}  & ЫВСБМБДН ЧНЬСЙГКККВГПЦИЕ ВДЧЪДРФЙЯЫУТЙС ТЗАТЬЬДО. \\ 
+\textbf{Режим 3}  & Индикаторная буква: О \\ 
+& ЭАЮ ХАУУХШЖФЮГ РЭЗГЮ ОЮВУЮЫПЙН \\ 
+\textbf{Режим 4}  & ХътвируАяжибйчСчусйцпЪецххлцДинпциьГдгзгээВзгзп \\ 
+\textbf{Режим 5}  & Пароль: ВОЗМОЖНОСТИ \\ 
+& ЦБГНРСНЕРГ ЕВВМЗРЧМЖ РО СЗЬТНИЯГВПГ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОБЕСПЕЧЕНИЕМ ДОСТУПА ГРАЖДАН К \\ 
+\textbf{Режим 2}  & ОТКРЫТЫМ ГОСУДАРСТВЕННЫМ ИНФОРМАЦИОННЫМ РЕСУРСАМ. \\ 
+\textbf{Режим 2}  & Индикаторная буква: О \\ 
+& ДЛЯ ДОСТИЖЕНИЯ ЭТОГО ТРЕБУЕТСЯ \\ 
+\textbf{Режим 4}  & УКРЕПЛЯТЬ ГОСУДАРСТВЕННЫЕ СРЕДСТВА МАССОВОЙ \\ 
+\textbf{Режим 5}  & Пароль: ВОЗМОЖНОСТИ \\ 
+& ИНФОРМАЦИИ РАСШИРЯТЬ ИХ ВОЗМОЖНОСТИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПЙ ПАДТЬЪСЫИБУУЯЛ ЗСЧЮЧЧКЖВ ЕЗХХЖЛВЧММВ \\ 
+\textbf{Режим 2}  & ЫЩЙВЩБОДИН ОЯ АЬЯСШШНЮПИ Й \\ 
+\textbf{Режим 3}  & Индикаторная буква: Б \\ 
+& ЧШДПЭПКЧ СЩЪДНОЛЛЛШОЬИГУ ШКСХКЮРНЕЧЦЙНШ ЙУМЙЪЪРФ \\ 
+\textbf{Режим 4}  & РзшщтВкцфбЬэччуРпкйщЕфэьсМгзууЕэюдзЖбышхХыылэЙи \\ 
+\textbf{Режим 5}  & Пароль: НАЦИОНАЛЬНЫХ \\ 
+& БЧСЪТХВЮЯНЧЯЭ. ЖЯТЩХЯ ОДЕОХЬДЙЭЦНЯ ЖЬЧЕЛЩАЭКБОЗ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПО СВОЕВРЕМЕННОМУ ДОВЕДЕНИЮ ДОСТОВЕРНОЙ \\ 
+\textbf{Режим 2}  & ИНФОРМАЦИИ ДО РОССИЙСКИХ И \\ 
+\textbf{Режим 2}  & Индикаторная буква: Б \\ 
+& ОТКРЫТЫХ ГОСУДАРСТВЕННЫХ ИНФОРМАЦИОННЫХ РЕСУРСОВ \\ 
+\textbf{Режим 4}  & ПОВЫСИТЬ ЭФФЕКТИВНОСТЬ ИХ ХОЗЯЙСТВЕННОГО \\ 
+\textbf{Режим 5}  & Пароль: НАЦИОНАЛЬНЫХ \\ 
+& ИСПОЛЬЗОВАНИЯ. ТРЕТЬЯ СОСТАВЛЯЮЩАЯ НАЦИОНАЛЬНЫХ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАЫОАШЯНЙ НКЭФЦЦОЙЧД ЗЛББМИЧУТ Э \\ 
+\textbf{Режим 2}  & ЫЩЙВЩБОДИТЯССК ЯТЧНЦ ДЖЖЫИЫЩШ Б \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ш \\ 
+& ЛКЮП АЦЗЦШЬЖЙ ФЗЩЗГЦВЙМЭЮ ЛГЦЩГЫХЕЬУАЯЕЛ \\ 
+\textbf{Режим 4}  & КъьмлрбКрнатръУвфвюшыКьллртаФрьеъдгРйййюэшУжйукъъ \\ 
+\textbf{Режим 5}  & Пароль: ИНДУСТРИИ \\ 
+& С МФЙ ЗГХВТ ЫЩЦЗЦЮОЫЫ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНТЕРЕСОВ РОССИЙСКОЙ ФЕДЕРАЦИИ В \\ 
+\textbf{Режим 2}  & ИНФОРМАЦИОННОЙ СФЕРЕ ВКЛЮЧАЕТ В \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ш \\ 
+& СЕБЯ РАЗВИТИЕ СОВРЕМЕННЫХ ИНФОРМАЦИОННЫХ \\ 
+\textbf{Режим 4}  & ТЕХНОЛОГИЙ ОТЕЧЕСТВЕННОЙ ИНДУСТРИИ ИНФОРМАЦИИ \\ 
+\textbf{Режим 5}  & Пароль: ИНДУСТРИИ \\ 
+& В ТОМ ЧИСЛЕ ИНДУСТРИИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СИПЙЭЭГ ЙЖКЧЖМАЧРЫИЧУТ ЪИТЭСТСЬБИОХЕТЖЧ П \\ 
+\textbf{Режим 2}  & ЦЯНУУ ВФИВЫФЪХСКШ ЬНСНЦЪЗЗХХГЕ ЫЙЮЧЙУГЩЯИР \\ 
+\textbf{Режим 3}  & Индикаторная буква: К \\ 
+& ЩЖБЯШ КХ ААЬЖАОТЖЙЧ Ц \\ 
+\textbf{Режим 4}  & ШоцгукчЧбяэатяНяйлчббЖяж \\ 
+\textbf{Режим 5}  & Пароль: МИРОВОЙ \\ 
+& ФЫОЫГЫХ ЬХЮЫЧ О АМРЕН \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СРЕДСТВ ИНФОРМАТИЗАЦИИ ТЕЛЕКОММУНИКАЦИИ И \\ 
+\textbf{Режим 2}  & СВЯЗИ ОБЕСПЕЧЕНИЕ ПОТРЕБНОСТЕЙ ВНУТРЕННЕГО \\ 
+\textbf{Режим 2}  & Индикаторная буква: К \\ 
+& РЫНКА ЕЕ ПРОДУКЦИЕЙ И \\ 
+\textbf{Режим 4}  & ВЫХОД ЭТОЙ ПРОДУКЦИИ НА \\ 
+\textbf{Режим 5}  & Пароль: МИРОВОЙ \\ 
+& МИРОВОЙ РЫНОК А ТАКЖЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОЩДОЮЩФРМВБ ЪИЛЩЩБИБЬЮ ЫАРАЦНЭЭИИЧ П \\ 
+\textbf{Режим 2}  & ОЪЗОЖЖЙТ. А ЙЪЬЪСЫИБУЦЩ ЛУНЬПЗДА \\ 
+\textbf{Режим 3}  & Индикаторная буква: А \\ 
+& ЖМГФРГ ВФ ЗГЫС УЫЯЯЖШ \\ 
+\textbf{Режим 4}  & ЛчюджюЮбкдюлЕщниэмЩюмшбфХлснхыЮнж \\ 
+\textbf{Режим 5}  & Пароль: МИРОВОЙ \\ 
+& ЭИФАЦ С АЖЧЮСЧС. СНМХСР \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОБЕСПЕЧЕНИЕ НАКОПЛЕНИЯ СОХРАННОСТИ И \\ 
+\textbf{Режим 2}  & РЕСУРСОВ. В СОВРЕМЕННЫХ УСЛОВИЯХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: А \\ 
+& ТОЛЬКО НА ЭТОЙ ОСНОВЕ \\ 
+\textbf{Режим 4}  & МОЖНО РЕШАТЬ ПРОБЛЕМЫ СОЗДАНИЯ \\ 
+\textbf{Режим 5}  & Пароль: МИРОВОЙ \\ 
+& НАУКИ И ТЕХНИКИ. РОССИЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДШПЪПУ ЩАЕЬЦК ЯЩЪЪЛЯУУК СОТТИ \\ 
+\textbf{Режим 2}  & ЦМТЯУ ЛАВЫХЦЩ ЬФШШСНЙ ХЖЮКЗБПГМШЧЙЕДДЛ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Н \\ 
+& Б ЫВЫРЖЮРКУССК ЬЬЭХЛТЮЕЮЖЖШШГ. ЫЪЬ \\ 
+\textbf{Режим 4}  & УрпюшХяьиыКахзъАйбйжЮбкшрЪцингБюбълУъыушЧм \\ 
+\textbf{Режим 5}  & Пароль: ЕДИНОГО \\ 
+& Ш ИЪЬНФЙЧКММКХКЕЬК ББЬРЕИЙДГЮЩЯНЦ АЭЧБЭЙЪ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДОЛЖНА ЗАНЯТЬ ДОСТОЙНОЕ МЕСТО \\ 
+\textbf{Режим 2}  & СРЕДИ МИРОВЫХ ЛИДЕРОВ МИКРОЭЛЕКТРОННОЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Н \\ 
+& И КОМПЬЮТЕРНОЙ ПРОМЫШЛЕННОСТИ. ДЛЯ \\ 
+\textbf{Режим 4}  & ДОСТИЖЕНИЯ ЭТОГО ТРЕБУЕТСЯ РАЗВИВАТЬ \\ 
+\textbf{Режим 5}  & Пароль: ЕДИНОГО \\ 
+& И СОВЕРШЕНСТВОВАТЬ ИНФРАСТРУКТУРУ ЕДИНОГО \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАРЯАНЙБШФХООЪШ ШШЧЮЮПЯДЙЙЬЭ ГРЩВЬЬЫИЯФ БЮЧЧНЪЯПЦ \\ 
+\textbf{Режим 2}  & ОЛДЛЪБАЧЭ ДЙАЧСГГКЭТАЛЦ КИЖАЬЬЭЧР ЦЮФЖЮЙТОВЕЪГОЦ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Щ \\ 
+& НКЧКВ Д ЧЦУЭОЬЙХ ХМЕИАВИЗЯЯТТЪ \\ 
+\textbf{Режим 4}  & НднуьбьЮюлцубтУъгыпрюАжуйупйЫзземзйИъл \\ 
+\textbf{Режим 5}  & Пароль: СРЕДСТВ \\ 
+& ЖДППЙТЬРЙ ОФДДЭЙДФЬЕЖОЕХЭЕДИИ ЦОЧЦЦЮГ Р \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНФОРМАЦИОННОГО ПРОСТРАНСТВА РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+\textbf{Режим 2}  & РАЗВИВАТЬ ОТЕЧЕСТВЕННУЮ ИНДУСТРИЮ ИНФОРМАЦИОННЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Щ \\ 
+& УСЛУГ И ПОВЫШАТЬ ЭФФЕКТИВНОСТЬ \\ 
+\textbf{Режим 4}  & РАЗВИВАТЬ ПРОИЗВОДСТВО В РОССИЙСКОЙ \\ 
+\textbf{Режим 5}  & Пароль: СРЕДСТВ \\ 
+& ФЕДЕРАЦИИ КОНКУРЕНТОСПОСОБНЫХ СРЕДСТВ И \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СШИИЙШ ЦЮФЖЮЙТЖВЛЬЖБУ ДЬУНЯУЯСЫЬХКМУЮЖ Ч \\ 
+\textbf{Режим 2}  & ЦЯНУУ ГКЩЙЬЫЖЫМ БРЙССЮЦ ФОКХМЕ \\ 
+\textbf{Режим 3}  & Индикаторная буква: П \\ 
+& Ж НЮЮПСХГКЗЪЖЖЕ ЕЦЙЙБМИЧУТ ВВЫЬНЗАЗКТЮКЧШ \\ 
+\textbf{Режим 4}  & ФодтйъгсЦюатчхахЯпчыд \\ 
+\textbf{Режим 5}  & Пароль: ИССЛЕДОВАНИЙ \\ 
+& ПЧДГЕХНШЖНВЪГФЮ М ННСЧДНАНХЮ РОЬОНДЙЬИНЫВ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СИСТЕМ ИНФОРМАТИЗАЦИИ ТЕЛЕКОММУНИКАЦИИ И \\ 
+\textbf{Режим 2}  & СВЯЗИ РАСШИРЯТЬ УЧАСТИЕ РОССИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: П \\ 
+& В МЕЖДУНАРОДНОЙ КООПЕРАЦИИ ПРОИЗВОДИТЕЛЕЙ \\ 
+\textbf{Режим 4}  & ЭТИХ СРЕДСТВ И СИСТЕМ \\ 
+\textbf{Режим 5}  & Пароль: ИССЛЕДОВАНИЙ \\ 
+& ФУНДАМЕНТАЛЬНЫХ И ПРИКЛАДНЫХ ИССЛЕДОВАНИЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РЗНБЖЖСТИХ Й ИСЙКВН МЧХПЧЕЯПЛБНПТА \\ 
+\textbf{Режим 2}  & ЮЛЪБВЪВРЕЛЯАЗЪНЭ Ф ТЧМШШ. УЦНЪЕОХЫУ \\ 
+\textbf{Режим 3}  & Индикаторная буква: П \\ 
+& ТЬЯЯЕМЗЩРАРЫ ЧБКГЙЕСЩКЩЗЙ АЫЩЭЫКБЯЖ ЯИСЬЮЮЭЖЗЦ \\ 
+\textbf{Режим 4}  & ШщфкфЖужщэУъыъцНцгдвУукъпВшшзпКгеьщАл \\ 
+\textbf{Режим 5}  & Пароль: ВКЛЮЧАЕТ \\ 
+& ГУПЧЩАЧЮ Г ГЪШП ВЕЭЦЪК \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РАЗРАБОТОК В СФЕРАХ ИНФОРМАТИЗАЦИИ \\ 
+\textbf{Режим 2}  & ТЕЛЕКОММУНИКАЦИИ И СВЯЗИ. ЧЕТВЕРТАЯ \\ 
+\textbf{Режим 2}  & Индикаторная буква: П \\ 
+& СОСТАВЛЯЮЩАЯ НАЦИОНАЛЬНЫХ ИНТЕРЕСОВ РОССИЙСКОЙ \\ 
+\textbf{Режим 4}  & ФЕДЕРАЦИИ В ИНФОРМАЦИОННОЙ СФЕРЕ \\ 
+\textbf{Режим 5}  & Пароль: ВКЛЮЧАЕТ \\ 
+& ВКЛЮЧАЕТ В СЕБЯ ЗАЩИТУ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАРЯАНЙБШФХОБИ ОЪЗОЖЖЙТ ЕЦ ГАДФЛТЕЬУАЭТСЧЙЭФФМХ \\ 
+\textbf{Режим 2}  & ЦКЭЭЭЗЛ ЖЫВЖЦЫЗУГБЯ ЭЬСЫЫШЫЯЯТТО ЗФЯКФШВИМЖПЦИЗ \\ 
+\textbf{Режим 3}  & Индикаторная буква: П \\ 
+& К ТЮКЧЗКЗШЭЮМЙБКГЙЕДКЧ ЕУЪЪИУ ЯШЬ \\ 
+\textbf{Режим 4}  & ЮрфкбюКяэьщлИцйхчйЖжиэ \\ 
+\textbf{Режим 5}  & Пароль: ТЕРРИТОРИИ \\ 
+& ЖЭМЪИБОДЩХО ФР КТЧРЙЙЪЧШЙ ОЪЖВЙЫ. \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНФОРМАЦИОННЫХ РЕСУРСОВ ОТ НЕСАНКЦИОНИРОВАННОГО \\ 
+\textbf{Режим 2}  & ДОСТУПА ОБЕСПЕЧЕНИЕ БЕЗОПАСНОСТИ ИНФОРМАЦИОННЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: П \\ 
+& И ТЕЛЕКОММУНИКАЦИОННЫХ СИСТЕМ КАК \\ 
+\textbf{Режим 4}  & УЖЕ РАЗВЕРНУТЫХ ТАК И \\ 
+\textbf{Режим 5}  & Пароль: ТЕРРИТОРИИ \\ 
+& СОЗДАВАЕМЫХ НА ТЕРРИТОРИИ РОССИИ. \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & В ТЗЪО ОЫГИЧ ЩЯВФЕЫФИЯА \\ 
+\textbf{Режим 2}  & ЯЬПЩЬЮИЛ ГЕМЮЮБЮЙЙППФ ЫЩЙВЩБОДИТЯСДЫ ЯЗЬЬЦЗ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Щ \\ 
+& ЪЧЧБНБТ ЖЛЧР ЙСЭТТ ВВННКК \\ 
+\textbf{Режим 4}  & РщхдгшЪдцчкфЯяпемпЬцфеумПжквьдРнхдкдЗс \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННЫХ \\ 
+& МЬКЬЙ З ЩИПЫДВЫМЫГРБТУ ЧХМЩАВ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & В ЭТИХ ЦЕЛЯХ НЕОБХОДИМО \\ 
+\textbf{Режим 2}  & ПОВЫСИТЬ БЕЗОПАСНОСТЬ ИНФОРМАЦИОННЫХ СИСТЕМ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Щ \\ 
+& ВКЛЮЧАЯ СЕТИ СВЯЗИ ПРЕЖДЕ \\ 
+\textbf{Режим 4}  & ВСЕГО БЕЗОПАСНОСТЬ ПЕРВИЧНЫХ СЕТЕЙ \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННЫХ \\ 
+& СВЯЗИ И ИНФОРМАЦИОННЫХ СИСТЕМ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ФГВВЧАЪЭЪХП ЩГНХББО ОАУБЮЙЬЬЬЕЙЗШШЙ РЙУЖЖВ \\ 
+\textbf{Режим 2}  & ЫЛХЮЯЯЖ ЖИСЯЦЪФФФЩЪЧППЪ УЪСЙЙБ ДЕФЧНЯРТШ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ы \\ 
+& ШЧЮЖЩЩЦВЪЫ ЙСИИРЗЪНЭ ЛКИЙЭЬФЕХ-ЖХДГЕЗЦЦГ В \\ 
+\textbf{Режим 4}  & ЦпцифГхдэюХлащдТрчжзТрчиоШунюьВкфгеЛжжюй \\ 
+\textbf{Режим 5}  & Пароль: ДЕЯТЕЛЬНОСТИ \\ 
+& ЦЧСЮЧПФЩЫЦЮЫ Д СЯДЖЪ ЙБВПРЩ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ФЕДЕРАЛЬНЫХ ОРГАНОВ ГОСУДАРСТВЕННОЙ ВЛАСТИ \\ 
+\textbf{Режим 2}  & ОРГАНОВ ГОСУДАРСТВЕННОЙ ВЛАСТИ СУБЪЕКТОВ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ы \\ 
+& РОССИЙСКОЙ ФЕДЕРАЦИИ ФИНАНСОВО-КРЕДИТНОЙ И \\ 
+\textbf{Режим 4}  & БАНКОВСКОЙ СФЕР СФЕРЫ ХОЗЯЙСТВЕННОЙ \\ 
+\textbf{Режим 5}  & Пароль: ДЕЯТЕЛЬНОСТИ \\ 
+& ДЕЯТЕЛЬНОСТИ А ТАКЖЕ СИСТЕМ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И ЫУОШААЦ ШКСХКЮРХЕЪУХЩВ АДЪДМЯЬЫСШ \\ 
+\textbf{Режим 2}  & Ы ЬЩСЛЫЫС РКВСКФО СШИИЙШ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ч \\ 
+& ЫЯЯЙЦХПХЧВ ГШЙЗМУМЩ В ЕМЦТУСЫ \\ 
+\textbf{Режим 4}  & СнщегетИыютмрыЯмйяпеэУйъъяепЯемдвоыРхпй \\ 
+\textbf{Режим 5}  & Пароль: РАЗВИТИЕ \\ 
+& ЩАНШХМЫ НОЙЬЙСЦАЬКУЗЮЫ ГГСДМРЦПГЖШОЙХВЙЬ ЕЕМУЬФЫР \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И СРЕДСТВ ИНФОРМАТИЗАЦИИ ВООРУЖЕНИЯ \\ 
+\textbf{Режим 2}  & И ВОЕННОЙ ТЕХНИКИ СИСТЕМ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ч \\ 
+& УПРАВЛЕНИЯ ВОЙСКАМИ И ОРУЖИЕМ \\ 
+\textbf{Режим 4}  & ЭКОЛОГИЧЕСКИ ОПАСНЫМИ И ЭКОНОМИЧЕСКИ \\ 
+\textbf{Режим 5}  & Пароль: РАЗВИТИЕ \\ 
+& ВАЖНЫМИ ПРОИЗВОДСТВАМИ ИНТЕНСИФИЦИРОВАТЬ РАЗВИТИЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОФДИГШШБЛЕДДЯГ ГГРЯЬХУХББЖЦ ЙИНДЭГЭШТЭ Е \\ 
+\textbf{Режим 2}  & ЯЯИПИДОЗЗУН ОШЩРЖЖТ ЛЬЗБЕШ АЫЪБЫЯЖВКХ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Э \\ 
+& У ЛЬГЫФУЗ ИЯЬТСНХЪ ЧГ \\ 
+\textbf{Режим 4}  & ЩпьлиЩимжэСрадеЛохтбМнйжсНъажбНмхунЯквчж \\ 
+\textbf{Режим 5}  & Пароль: ГОСУДАРСТВЕННУЮ \\ 
+& ЭКБРПМЙВ ЖЗЬМНЫСЩШХЪА БШЦШДЕДЕШЗЙБДЗГ ЖРВЙЭ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОТЕЧЕСТВЕННОГО ПРОИЗВОДСТВА АППАРАТНЫХ И \\ 
+\textbf{Режим 2}  & ПРОГРАММНЫХ СРЕДСТВ ЗАЩИТЫ ИНФОРМАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Э \\ 
+& И МЕТОДОВ КОНТРОЛЯ ЗА \\ 
+\textbf{Режим 4}  & ИХ ЭФФЕКТИВНОСТЬЮ ОБЕСПЕЧИТЬ ЗАЩИТУ \\ 
+\textbf{Режим 5}  & Пароль: ГОСУДАРСТВЕННУЮ \\ 
+& СВЕДЕНИЙ СОСТАВЛЯЮЩИХ ГОСУДАРСТВЕННУЮ ТАЙНУ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РЗЛДЭТЦТЪ ФЧЧЙИЗВОЮЩППР ЧМПМЦЯВТЦИВВОТ УЯТАООЬЗКЖ \\ 
+\textbf{Режим 2}  & МЬННЛШГЭФ Ж ЬЦКЕИИЧ КВМВЕЗЪА \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ь \\ 
+& Л ЬАТВВХВУУОА ФТСИКЩЖКДЩШЙЫ ЕПОЦПДСЮЫГВРЮЕ \\ 
+\textbf{Режим 4}  & ПазтбатЗбхылбвТгбцлръЪниежгьЧштякотЖжфшчфмКэклах \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& ДДВЩЙЦЙПЪРЕМКЙ С БРЪШЬЕЦЖСГЩБИЛ ЕМНОЖ. \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РАСШИРЯТЬ МЕЖДУНАРОДНОЕ СОТРУДНИЧЕСТВО РОССИЙСКОЙ \\ 
+\textbf{Режим 2}  & ФЕДЕРАЦИИ В ОБЛАСТИ РАЗВИТИЯ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ь \\ 
+& И БЕЗОПАСНОГО ИСПОЛЬЗОВАНИЯ ИНФОРМАЦИОННЫХ \\ 
+\textbf{Режим 4}  & РЕСУРСОВ ПРОТИВОДЕЙСТВИЯ УГРОЗЕ РАЗВЯЗЫВАНИЯ \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& ПРОТИВОБОРСТВА В ИНФОРМАЦИОННОЙ СФЕРЕ. \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПЙ ПАДТЫ ЩЭЧИЯ УШУУЧЖЭЮЭФФННП \\ 
+\textbf{Режим 2}  & ЗЫПМЛК ЫЩЙВЩБОДИТЯССК ЦЖЮФФГФШШООД ЖЦЧПРРМЛЩУ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ы \\ 
+& КЩРРПЯШЛЫ ЪЩЬЩХЬФФСЧЦУАМ ЭЕ ИЗЙЕЭЫСЕЩ \\ 
+\textbf{Режим 4}  & ЛвмгакНсдгуоЩжозфэЛмхкнмЯмееэдЙьсйпйТм \\ 
+\textbf{Режим 5}  & Пароль: ЧЕЛОВЕКА \\ 
+& Ф ЬВЫЩЭИАЬ БЪТЗЙЬЪЧ Ш \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПО СВОЕЙ ОБЩЕЙ НАПРАВЛЕННОСТИ \\ 
+\textbf{Режим 2}  & УГРОЗЫ ИНФОРМАЦИОННОЙ БЕЗОПАСНОСТИ РОССИЙСКОЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ы \\ 
+& ФЕДЕРАЦИИ ПОДРАЗДЕЛЯЮТСЯ НА СЛЕДУЮЩИЕ \\ 
+\textbf{Режим 4}  & ВИДЫ УГРОЗЫ КОНСТИТУЦИОННЫМ ПРАВАМ \\ 
+\textbf{Режим 5}  & Пароль: ЧЕЛОВЕКА \\ 
+& И СВОБОДАМ ЧЕЛОВЕКА И \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ГЗЫГРТМВДЬ С ГНЫКЩЩЬ КРВЯЖИИО \\ 
+\textbf{Режим 2}  & КФХИО З ШКСХКЮРНЕЧЦЙЙЩ УУНМЯЫШЫЫРРН \\ 
+\textbf{Режим 3}  & Индикаторная буква: В \\ 
+& ЦЮГЕЛЪЛЮЯГФГГРЕ НВГЫБТШЯИУ О НМЫЦЭЭГДЖЧЧЙШ \\ 
+\textbf{Режим 4}  & ПтсхьпьЖэполваЭивщрмиГхпфхцмЙюноесиЯппвв \\ 
+\textbf{Режим 5}  & Пароль: ФЕДЕРАЦИИ \\ 
+& ЩЭОШКЩФЫ ЕВЬИШЦЧФЪЛ МЧЦЧОАЛЫЫ ЕЦНЭМН \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ГРАЖДАНИНА В ОБЛАСТИ ДУХОВНОЙ \\ 
+\textbf{Режим 2}  & ЖИЗНИ И ИНФОРМАЦИОННОЙ ДЕЯТЕЛЬНОСТИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: В \\ 
+& ИНДИВИДУАЛЬНОМУ ГРУППОВОМУ И ОБЩЕСТВЕННОМУ \\ 
+\textbf{Режим 4}  & СОЗНАНИЮ ДУХОВНОМУ ВОЗРОЖДЕНИЮ РОССИИ \\ 
+\textbf{Режим 5}  & Пароль: ФЕДЕРАЦИИ \\ 
+& ПОЛИТИКИ РОССИЙСКОЙ ФЕДЕРАЦИИ УГРОЗЫ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РЗНЗЭБКМ ИЯЧУЦЭЭГДЖЧЧД ГМБЧЙЙДУТ АЫЪБЫЯЖВКХ \\ 
+\textbf{Режим 2}  & ГППУЭУА ЩЕУПММЪТО ЩРЭКЫЫЮ КИУНИХЪНПЙРНЕД \\ 
+\textbf{Режим 3}  & Индикаторная буква: Д \\ 
+& ЬЦШМЧШЧПОЦГЪЯШЛЫ Б ДНХСС БЗКБАЗРЮЭШГ \\ 
+\textbf{Режим 4}  & УчпшжвбцУпюшвдыцАюжплммлХэлвжытхЗх \\ 
+\textbf{Режим 5}  & Пароль: ПРОДУКЦИИ \\ 
+& ЗД ЛНПИУРЖКЙ С МЬМЬАЦ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РАЗВИТИЮ ОТЕЧЕСТВЕННОЙ ИНДУСТРИИ ИНФОРМАЦИИ \\ 
+\textbf{Режим 2}  & ВКЛЮЧАЯ ИНДУСТРИЮ СРЕДСТВ ИНФОРМАТИЗАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Д \\ 
+& ТЕЛЕКОММУНИКАЦИИ И СВЯЗИ ОБЕСПЕЧЕНИЮ \\ 
+\textbf{Режим 4}  & ПОТРЕБНОСТЕЙ ВНУТРЕННЕГО РЫНКА В \\ 
+\textbf{Режим 5}  & Пароль: ПРОДУКЦИИ \\ 
+& ЕЕ ПРОДУКЦИИ И ВЫХОДУ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЭЙГБ ЩЩЛЭЩСГЭФ ЬЦ ЭЗИФЕХЧ \\ 
+\textbf{Режим 2}  & ОАЧЧЕ Т ЖЯЩБТ ГНСГРНЕФАЭЦ \\ 
+\textbf{Режим 3}  & Индикаторная буква: З \\ 
+& УШЬААНШНЗД ИКСКВЮЖЖШШГ Щ ИЖЧТЛЕТЭЫЫКУ \\ 
+\textbf{Режим 4}  & ЮробтэйИьтбъдиЭдвщдеуЯвеюмцдЭэпущввСфюр \\ 
+\textbf{Режим 5}  & Пароль: СРЕДСТВ \\ 
+& ПДХПЩЦЮЪФФЮЩТЬРШФКФО КЙДПИПБ Ц ЦЙЬЬБМ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЭТОЙ ПРОДУКЦИИ НА МИРОВОЙ \\ 
+\textbf{Режим 2}  & РЫНОК А ТАКЖЕ ОБЕСПЕЧЕНИЮ \\ 
+\textbf{Режим 2}  & Индикаторная буква: З \\ 
+& НАКОПЛЕНИЯ СОХРАННОСТИ И ЭФФЕКТИВНОГО \\ 
+\textbf{Режим 4}  & УГРОЗЫ БЕЗОПАСНОСТИ ИНФОРМАЦИОННЫХ И \\ 
+\textbf{Режим 5}  & Пароль: СРЕДСТВ \\ 
+& ТЕЛЕКОММУНИКАЦИОННЫХ СРЕДСТВ И СИСТЕМ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & КМО СПЙ КВМВГЮЦШЖЭЮ ЦИЛ \\ 
+\textbf{Режим 2}  & Ы ЕЩАИХКЗФЯМР ЬЦ АЖИНЖНОХЙМ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Е \\ 
+& ИФНЭПЦ. ФЩШЧГТЕВ ЩДГЕЕТЪЪЕЬУАЯЕИ ССМЙДО \\ 
+\textbf{Режим 4}  & БдшлчычЕпекбчхЕэйчоеш \\ 
+\textbf{Режим 5}  & Пароль: ДУХОВНОЙ \\ 
+& ЙЖХИДНБОКУ Ф ЫЩРОЯЬЪ НГИГКНФД \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & КАК УЖЕ РАЗВЕРНУТЫХ ТАК \\ 
+\textbf{Режим 2}  & И СОЗДАВАЕМЫХ НА ТЕРРИТОРИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Е \\ 
+& РОССИИ. УГРОЗАМИ КОНСТИТУЦИОННЫМ ПРАВАМ \\ 
+\textbf{Режим 4}  & И СВОБОДАМ ЧЕЛОВЕКА И \\ 
+\textbf{Режим 5}  & Пароль: ДУХОВНОЙ \\ 
+& ГРАЖДАНИНА В ОБЛАСТИ ДУХОВНОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЖЮЧОП Ц ЙЖКЧЖМАЗРДГЩЩУ ИИЗВФСЙССААЗ \\ 
+\textbf{Режим 2}  & ЫЩСТЭЯЭЩШСЙССНТ ПИСФКОГШЧХ Д ПУФЫЦЦСАВРРБГ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Х \\ 
+& ЩЫИТЮЯФЙ ЮТУЭМХХШЭ ЩЮДЮПВЫЫДЛЭ ДЩЪГЯС \\ 
+\textbf{Режим 4}  & НвгсйКъхэбЕдсщьХорвяОбзщсЮквкхЛъзлпРуютжХя \\ 
+\textbf{Режим 5}  & Пароль: ОРГАНАМИ \\ 
+& ЫОЕАЩАФЫ ФШЭЮЯАЬМЩЩЙМЩЙО СТРЭЖБ ЙЬЯОЮГЕБ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЖИЗНИ И ИНФОРМАЦИОННОЙ ДЕЯТЕЛЬНОСТИ \\ 
+\textbf{Режим 2}  & ИНДИВИДУАЛЬНОМУ ГРУППОВОМУ И ОБЩЕСТВЕННОМУ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Х \\ 
+& СОЗНАНИЮ ДУХОВНОМУ ВОЗРОЖДЕНИЮ РОССИИ \\ 
+\textbf{Режим 4}  & МОГУТ ЯВЛЯТЬСЯ ПРИНЯТИЕ ФЕДЕРАЛЬНЫМИ \\ 
+\textbf{Режим 5}  & Пароль: ОРГАНАМИ \\ 
+& ОРГАНАМИ ГОСУДАРСТВЕННОЙ ВЛАСТИ ОРГАНАМИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ГЮЗОРТПППЯТЩВВТ ФТЗЛЛЭ УБПЩЖОЬКД КЗХОЕЕЮДЙЩ \\ 
+\textbf{Режим 2}  & МЬННЛШГЭФ ЬЬСФЕЬЖДЗУН ШШБЫЦУЭЮ ЬРМЩН \\ 
+\textbf{Режим 3}  & Индикаторная буква: К \\ 
+& ДПНТЯЖПЪКЫ КНФИИЧЭЭИМЖПЦИЛ ЙЙЬСН У \\ 
+\textbf{Режим 4}  & ГэдхъГхмыеЯцялбИигсъФэыфъСпр \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& АЙЙЫЩЭЙК УСУЩС О ЫЩМЫОФАЛЫЫЩЩЫХ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ГОСУДАРСТВЕННОЙ ВЛАСТИ СУБЪЕКТОВ РОССИЙСКОЙ \\ 
+\textbf{Режим 2}  & ФЕДЕРАЦИИ НОРМАТИВНЫХ ПРАВОВЫХ АКТОВ \\ 
+\textbf{Режим 2}  & Индикаторная буква: К \\ 
+& УЩЕМЛЯЮЩИХ КОНСТИТУЦИОННЫЕ ПРАВА И \\ 
+\textbf{Режим 4}  & СВОБОДЫ ГРАЖДАН В ОБЛАСТИ \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& ДУХОВНОЙ ЖИЗНИ И ИНФОРМАЦИОННОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДДЫОЩМЬММЦЦЫ ЕЩАИХБЬФ ЯАСССИКШШ ХГ \\ 
+\textbf{Режим 2}  & МРВУЬЫТШЧЬХЮ ИЭОЬАМШЙЪ Е ЮУЖЦЦЕЙЙДЭРЬЫСЭ \\ 
+\textbf{Режим 3}  & Индикаторная буква: О \\ 
+& СУЩТУЬПЛОЗ Й НКЭФЦЦОЙЧД ЗЛББМИЧУТ \\ 
+\textbf{Режим 4}  & ЯтчмдоКагбьг \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& С МВУ ЬЗЧЭТ ВГ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДЕЯТЕЛЬНОСТИ СОЗДАНИЕ МОНОПОЛИЙ НА \\ 
+\textbf{Режим 2}  & ФОРМИРОВАНИЕ ПОЛУЧЕНИЕ И РАСПРОСТРАНЕНИЕ \\ 
+\textbf{Режим 2}  & Индикаторная буква: О \\ 
+& ИНФОРМАЦИИ В РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+\textbf{Режим 4}  & В ТОМ ЧИСЛЕ С \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& В ТОМ ЧИСЛЕ СО \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ССФЭХЗУ ПЗЕЦЪЙАЪЭЪХП ДДЩЪАВВБ УОПЭОШЕТЖЧ \\ 
+\textbf{Режим 2}  & ЕКВЕГЫПУМЩ ПАДЫП ЫВЛЩЩЬРРЩФСИНЩТ ЭЭГЪ \\ 
+\textbf{Режим 3}  & Индикаторная буква: К \\ 
+& ЛХ ТЬДАЛЦ К АЮФЧШХИР \\ 
+\textbf{Режим 4}  & ЖыжнялыжМоэаижьжЖтэбиэыхВжензшшуЕт \\ 
+\textbf{Режим 5}  & Пароль: СООБЩЕНИЙ \\ 
+& МНРЩДЭЬЪСЕК С ДЗВП МИЕХЦЩЗШЫ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СТОРОНЫ КРИМИНАЛЬНЫХ СТРУКТУР РЕАЛИЗАЦИИ \\ 
+\textbf{Режим 2}  & ГРАЖДАНАМИ СВОИХ КОНСТИТУЦИОННЫХ ПРАВ \\ 
+\textbf{Режим 2}  & Индикаторная буква: К \\ 
+& НА ЛИЧНУЮ И СЕМЕЙНУЮ \\ 
+\textbf{Режим 4}  & ТАЙНУ ТАЙНУ ПЕРЕПИСКИ ТЕЛЕФОННЫХ \\ 
+\textbf{Режим 5}  & Пароль: СООБЩЕНИЙ \\ 
+& ПЕРЕГОВОРОВ И ИНЫХ СООБЩЕНИЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НЖИДАЧОШРПАППР ХЦБЫЩАЪРРИ ЫКЫЮЯФВШНЗЧ ЦКЭЭЭЗЛ \\ 
+\textbf{Режим 2}  & У ЛХЙФЫЫЮЗИНН ФПКЪЬЗЪМПЧД ГМЮЕМЩНПТА \\ 
+\textbf{Режим 3}  & Индикаторная буква: М \\ 
+& ИИФИЧЪЗЗЗЫЛЦЦЛ ЙЙЛЩАВСЛЯН РБКЩФПЭЪЭВА НФМДХХР \\ 
+\textbf{Режим 4}  & ЛвюегъДшиьмюЩвзщпзПшкжкшФефызрЪкцмэьЗыыбхбЗэ \\ 
+\textbf{Режим 5}  & Пароль: НЕИСПОЛНЕНИЕ \\ 
+& Б ЭЬХЗВХЬЧЩГЭА ЬЪЛЬОЖБЧ ЩТШЕНЪГЬНЖБЧ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НЕРАЦИОНАЛЬНОЕ ЧРЕЗМЕРНОЕ ОГРАНИЧЕНИЕ ДОСТУПА \\ 
+\textbf{Режим 2}  & К ОБЩЕСТВЕННО НЕОБХОДИМОЙ ИНФОРМАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: М \\ 
+& ПРОТИВОПРАВНОЕ ПРИМЕНЕНИЕ СПЕЦИАЛЬНЫХ СРЕДСТВ \\ 
+\textbf{Режим 4}  & ВОЗДЕЙСТВИЯ НА ИНДИВИДУАЛЬНОЕ ГРУППОВОЕ \\ 
+\textbf{Режим 5}  & Пароль: НЕИСПОЛНЕНИЕ \\ 
+& И ОБЩЕСТВЕННОЕ СОЗНАНИЕ НЕИСПОЛНЕНИЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ФГВВЧАЪЭЪХВУ ВЩЭОУШЯЭ ШСАТЧЕНННЪЕЮЖЖЕ ЫЕАППЛ \\ 
+\textbf{Режим 2}  & ЫЛХЮЯЧИХ ЧНЬСЙГКККВГПЦЦГ ТГЬММУ ЪДКПЭСЛАЮ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ж \\ 
+& УЯТАООЬЗКЖ ИЕЪЪШБКГЩ МЙАИЩЭЛА БНРРААШС \\ 
+\textbf{Режим 4}  & УюуйпзчжЪъезцхжгЬдмаьълыЗздьштььДйндчцдкПпик \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& ЪМРЫСЖМХН К БЩЪИЕВФЕЙНМИЪЯ ЕЦНСТ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ФЕДЕРАЛЬНЫМИ ОРГАНАМИ ГОСУДАРСТВЕННОЙ ВЛАСТИ \\ 
+\textbf{Режим 2}  & ОРГАНАМИ ГОСУДАРСТВЕННОЙ ВЛАСТИ СУБЪЕКТОВ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ж \\ 
+& РОССИЙСКОЙ ФЕДЕРАЦИИ ОРГАНАМИ МЕСТНОГО \\ 
+\textbf{Режим 4}  & САМОУПРАВЛЕНИЯ ОРГАНИЗАЦИЯМИ И ГРАЖДАНАМИ \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& ОТНОШЕНИЯ В ИНФОРМАЦИОННОЙ СФЕРЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НЖННЪДОЮДЗЧЧВ ЦБЦСЪЫЖЯРАИ ЭБЛЛЛАП ЖСМЖЦЪО \\ 
+\textbf{Режим 2}  & У ЛЩЯЫЙЫЕИ ХНТЭНОГСЦШЖЧСЙ ЧЛПЧММНР \\ 
+\textbf{Режим 3}  & Индикаторная буква: В \\ 
+& НДГГЮУЕИЕФЖ ЪДЬФЛЛК КУЫЛЗПЯЯЯЙПХООП ЩПЫШШГ \\ 
+\textbf{Режим 4}  & ЩокдщТйцбыЖаблоУужюшДмпккЩочъюКкгъаТжшунДпзьфУы \\ 
+\textbf{Режим 5}  & Пароль: МЕСТНОГО \\ 
+& ЬЭЦЖБЯЭАНЗ ЖРЯНФОБШР ЦДФГБНЙ ЪРЕЩОЫПЭ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НЕПРАВОМЕРНОЕ ОГРАНИЧЕНИЕ ДОСТУПА ГРАЖДАН \\ 
+\textbf{Режим 2}  & К ОТКРЫТЫМ ИНФОРМАЦИОННЫМ РЕСУРСАМ \\ 
+\textbf{Режим 2}  & Индикаторная буква: В \\ 
+& ФЕДЕРАЛЬНЫХ ОРГАНОВ ГОСУДАРСТВЕННОЙ ВЛАСТИ \\ 
+\textbf{Режим 4}  & ОРГАНОВ ГОСУДАРСТВЕННОЙ ВЛАСТИ СУБЪЕКТОВ \\ 
+\textbf{Режим 5}  & Пароль: МЕСТНОГО \\ 
+& РОССИЙСКОЙ ФЕДЕРАЦИИ ОРГАНОВ МЕСТНОГО \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СЕХКИХХРВЦЩЦГЯ Г ЕЦРДЗДЮБ ОЛГНШСДН \\ 
+\textbf{Режим 2}  & ФЕЬЦФПВЧЛП М РЧЮУЕР ЪМЫГЮГЫС \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ш \\ 
+& ЛТЩФПЭЪЭЭ ЖХГЯЦЖЮМ ДЦЗЙЦЪЬЖБУ ЬЬСЫЛХЮЯФХЦЫЗД \\ 
+\textbf{Режим 4}  & ЙосйзсЗщмэуьЮкынылНавощнВчзожеРюйл \\ 
+\textbf{Режим 5}  & Пароль: ЦЕННОСТЕЙ \\ 
+& Х ЬГПРСЙЧНХД ЛЙТЭЮЯСИВП ЧНДЙЭЯТЧЫ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & САМОУПРАВЛЕНИЯ К ОТКРЫТЫМ АРХИВНЫМ \\ 
+\textbf{Режим 2}  & МАТЕРИАЛАМ К ДРУГОЙ ОТКРЫТОЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ш \\ 
+& СОЦИАЛЬНО ЗНАЧИМОЙ ИНФОРМАЦИИ ДЕЗОРГАНИЗАЦИЯ \\ 
+\textbf{Режим 4}  & И РАЗРУШЕНИЕ СИСТЕМЫ НАКОПЛЕНИЯ \\ 
+\textbf{Режим 5}  & Пароль: ЦЕННОСТЕЙ \\ 
+& И СОХРАНЕНИЯ КУЛЬТУРНЫХ ЦЕННОСТЕЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ВЙЙАКАС СМЧБИШ ЛХРЩЕКЯФЗ ФИЭЬЬЖННЬЙЮЧПЬО \\ 
+\textbf{Режим 2}  & ЯЯЙЦ Ш ИЕХГЗЪ ИГЙПБЛГС \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ф \\ 
+& Т НВОНКЮЯФЬЦ П НМОЪЭЭЦ \\ 
+\textbf{Режим 4}  & ДхдиифмКрталерШыашъииЫряогзчВешцехзОввсяваАщз \\ 
+\textbf{Режим 5}  & Пароль: МАССОВОЙ \\ 
+& ЗМЖЕРЮОЫЗЙДДЧИ ОЧЖМПЦЩГ ВСЖЫЦПК ЮОЯСЙАЕЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ВКЛЮЧАЯ АРХИВЫ НАРУШЕНИЕ КОНСТИТУЦИОННЫХ \\ 
+\textbf{Режим 2}  & ПРАВ И СВОБОД ЧЕЛОВЕКА \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ф \\ 
+& И ГРАЖДАНИНА В ОБЛАСТИ \\ 
+\textbf{Режим 4}  & МАССОВОЙ ИНФОРМАЦИИ ВЫТЕСНЕНИЕ РОССИЙСКИХ \\ 
+\textbf{Режим 5}  & Пароль: МАССОВОЙ \\ 
+& ИНФОРМАЦИОННЫХ АГЕНТСТВ СРЕДСТВ МАССОВОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАРЯАНЙБШЮ Н ДЗЭКЗГПЦРБМ РЪПГЪЛКМСБТААШС \\ 
+\textbf{Режим 2}  & ОАЧМУ Г ЮПРЩТЩУС ЯХКЬЛНСЯТТО \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ю \\ 
+& ХЛРСЧННЗ ЩШХЗЗЖМНЩЮДЙЩ Р ЕЪРУДАЙНРСТН \\ 
+\textbf{Режим 4}  & ИмптеъьзЧоубюоссЖанкэфяэПастткк \\ 
+\textbf{Режим 5}  & Пароль: СТРУКТУР \\ 
+& ЕЮ МУЩШБДЫЙТХ АЙОШЙМРКАЦЦЮФО ХШЩШЕКЧЧ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНФОРМАЦИИ С ВНУТРЕННЕГО ИНФОРМАЦИОННОГО \\ 
+\textbf{Режим 2}  & РЫНКА И УСИЛЕНИЕ ЗАВИСИМОСТИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ю \\ 
+& ДУХОВНОЙ ЭКОНОМИЧЕСКОЙ И ПОЛИТИЧЕСКОЙ \\ 
+\textbf{Режим 4}  & СФЕР ОБЩЕСТВЕННОЙ ЖИЗНИ РОССИИ \\ 
+\textbf{Режим 5}  & Пароль: СТРУКТУР \\ 
+& ОТ ЗАРУБЕЖНЫХ ИНФОРМАЦИОННЫХ СТРУКТУР \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДДВЫЙСБАЗРИ АЙЦВЭЫЧЪ ЪКЯССААЖЗ ЭЭХХВГЛЧВУ \\ 
+\textbf{Режим 2}  & ЫОЫЮФВСЧ ЭМЬИКДОП ПКЦЯШШПЭ ЕЙГГИФЛЫЧЪ \\ 
+\textbf{Режим 3}  & Индикаторная буква: П \\ 
+& ЬЦ КАХВИЙ ЗВХМЦДТ ЙА \\ 
+\textbf{Режим 4}  & ШквгуЬяъкжМзэьмЦчатчЕчффвЯшзыеХылщгЪгя \\ 
+\textbf{Режим 5}  & Пароль: ПРИНЯТЫМ \\ 
+& ЯОЪМВБЖЬЗЬИШВО ЭЖЬЮЪЕЧАП ИАЙГЭЧИП Ц \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ДЕВАЛЬВАЦИЯ ДУХОВНЫХ ЦЕННОСТЕЙ ПРОПАГАНДА \\ 
+\textbf{Режим 2}  & ОБРАЗЦОВ МАССОВОЙ КУЛЬТУРЫ ОСНОВАННЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: П \\ 
+& НА КУЛЬТЕ НАСИЛИЯ НА \\ 
+\textbf{Режим 4}  & ДУХОВНЫХ И НРАВСТВЕННЫХ ЦЕННОСТЯХ \\ 
+\textbf{Режим 5}  & Пароль: ПРИНЯТЫМ \\ 
+& ПРОТИВОРЕЧАЩИХ ЦЕННОСТЯМ ПРИНЯТЫМ В \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РБЛЫЭЭТФИФ ЭЕБЙФФЩЪ ЗПЪВЛЕРУ АЙЦВЭЫЫКУ \\ 
+\textbf{Режим 2}  & ЩЪФЭЩЩХФАЯЯЮЬ О ЯЙФЭАМКПЮВЧ ЧЦЖЫДЮЫНЛФ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Л \\ 
+& ЖЫШВЕЛЕРИ ЕГДЪАЯ МВУ ЫЛЪЗААЦЧКХХ \\ 
+\textbf{Режим 4}  & ОывтыКслаъЧаязшЗбвбхПэбуаЙтжипХжевиШлвылОык \\ 
+\textbf{Режим 5}  & Пароль: ИСПОЛЬЗОВАНИЯ \\ 
+& АГЦ КЖУФРЕМБН В ЫЦЯЫПФИЫГАЩЫС \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РОССИЙСКОМ ОБЩЕСТВЕ СНИЖЕНИЕ ДУХОВНОГО \\ 
+\textbf{Режим 2}  & НРАВСТВЕННОГО И ТВОРЧЕСКОГО ПОТЕНЦИАЛА \\ 
+\textbf{Режим 2}  & Индикаторная буква: Л \\ 
+& НАСЕЛЕНИЯ РОССИИ ЧТО СУЩЕСТВЕННО \\ 
+\textbf{Режим 4}  & ОСЛОЖНИТ ПОДГОТОВКУ ТРУДОВЫХ РЕСУРСОВ \\ 
+\textbf{Режим 5}  & Пароль: ИСПОЛЬЗОВАНИЯ \\ 
+& ДЛЯ ВНЕДРЕНИЯ И ИСПОЛЬЗОВАНИЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ННЙПЮТПИ КЪФППЕЙУРР С МЩЛ \\ 
+\textbf{Режим 2}  & ЩКАФЖ ШКСХКЮРНЕЧЦЙНШ ЪЬГБГЕБЯРБОЮЯФЗ ХНТЭНОГСЦДЙ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Б \\ 
+& (ВВЩЩЕЖДЕВЭЦАО ВБСБМБКШ ОКШ ЮНЮЩМДЖЕЩ \\ 
+\textbf{Режим 4}  & ЬлъчдИещижЗььшшВэъхзАваещОсбъыОруоеЦхьииЭщрмщЯаыпйЮкъкаЛмб \\ 
+\textbf{Режим 5}  & Пароль: ФЕДЕРАЦИИ \\ 
+& ИЭИЯЪАЯМЙНЧКФШГ СЪВТСЮОЙ ПЬММТЗИОШГ БТАСИДУЙЩ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НОВЕЙШИХ ТЕХНОЛОГИЙ В ТОМ \\ 
+\textbf{Режим 2}  & ЧИСЛЕ ИНФОРМАЦИОННЫХ МАНИПУЛИРОВАНИЕ ИНФОРМАЦИЕЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Б \\ 
+& (ДЕЗИНФОРМАЦИЯ СОКРЫТИЕ ИЛИ ИСКАЖЕНИЕ \\ 
+\textbf{Режим 4}  & ИНФОРМАЦИИ). УГРОЗАМИ ИНФОРМАЦИОННОМУ ОБЕСПЕЧЕНИЮ \\ 
+\textbf{Режим 5}  & Пароль: ФЕДЕРАЦИИ \\ 
+& ГОСУДАРСТВЕННОЙ ПОЛИТИКИ РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & МЙУЧЦ НЬЛКЪЮВШ АТЯЯЯЬФЗЮДАЧВ ЦЮФЖЮЙТОВЕЪГГЬВ \\ 
+\textbf{Режим 2}  & ОАЧМУ ЧЙПЦЛЫ АЬВ РГЭЭЯЦЯЕЛ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Б \\ 
+& ШВДЖМЙДС ГЕСЦИВВОКЯСДНО З ЮДЭИГЕЕЖЯЦЪ \\ 
+\textbf{Режим 4}  & ЫвжзхщыЪэниецхЖямвбухЯбпчтдяЦааьчькСрджейъФфцтт \\ 
+\textbf{Режим 5}  & Пароль: РОССИЙСКОЙ \\ 
+& ЗЫ РДПИЙЫССШКСДЫЕ ЙРВЯЙЯЦЩЪХ Р \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & МОГУТ ЯВЛЯТЬСЯ МОНОПОЛИЗАЦИЯ ИНФОРМАЦИОННОГО \\ 
+\textbf{Режим 2}  & РЫНКА РОССИИ ЕГО ОТДЕЛЬНЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Б \\ 
+& СЕКТОРОВ ОТЕЧЕСТВЕННЫМИ И ЗАРУБЕЖНЫМИ \\ 
+\textbf{Режим 4}  & ГОСУДАРСТВЕННЫХ СРЕДСТВ МАССОВОЙ ИНФОРМАЦИИ \\ 
+\textbf{Режим 5}  & Пароль: РОССИЙСКОЙ \\ 
+& ПО ИНФОРМИРОВАНИЮ РОССИЙСКОЙ И \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЗМИСДЙЙШШЙ ЫОРГЖМЙЛЫ ЩУАУХЗ ЖЩВХНУХПЭЭИИЛ \\ 
+\textbf{Режим 2}  & ОЮЗШЪЪЧГЕР ПАССЩХЕЬИ ЗБИЗЮЯЯЙЮЦ ММНЙНЕЗУ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Е \\ 
+& ОМЪШПНЙНЕЮПБАЕДКЧ ЛЭЬЩЛК БРЫЛБТТПЗД ИЖЭЭЕЖА \\ 
+\textbf{Режим 4}  & БхчюцЙосипЛлжмыФтгсфЯъвряПрккюЕэьяпИиемйЩъмззЬдр \\ 
+\textbf{Режим 5}  & Пароль: РАЗВИТИЮ \\ 
+& ЙМГЗЕМИГЙЙУШЪЪ ДТЧЩВЦРГ. ЦООЙИВЩГ ЕЮМУЬФЫЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЗАРУБЕЖНОЙ АУДИТОРИИ НИЗКАЯ ЭФФЕКТИВНОСТЬ \\ 
+\textbf{Режим 2}  & РОССИЙСКОЙ ФЕДЕРАЦИИ ВСЛЕДСТВИЕ ДЕФИЦИТА \\ 
+\textbf{Режим 2}  & Индикаторная буква: Е \\ 
+& КВАЛИФИЦИРОВАННЫХ КАДРОВ ОТСУТСТВИЯ СИСТЕМЫ \\ 
+\textbf{Режим 4}  & ФОРМИРОВАНИЯ И РЕАЛИЗАЦИИ ГОСУДАРСТВЕННОЙ \\ 
+\textbf{Режим 5}  & Пароль: РАЗВИТИЮ \\ 
+& ИНФОРМАЦИОННОЙ ПОЛИТИКИ. УГРОЗАМИ РАЗВИТИЮ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОФДИГШШБЛЕДДЛ БВЬДЩЩЛИН ЭСЫЬСФЕТЖЧ ЪЧЧБНБТ \\ 
+\textbf{Режим 2}  & ЫЩСЕГГРЬЖ ЫУОШААЦ ШКСХКЮРХЕЪУХЩВ ПУВАЫВЫБГУИЬЖВКХ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Л \\ 
+& М ЗЛТЩЩ МЯУМЪЯПЬЫСЮ БТЫТЗПННЬЬЦЖ \\ 
+\textbf{Режим 4}  & ЬяъпцмуъМэжпньщэИристт \\ 
+\textbf{Режим 5}  & Пароль: ПРОДУКЦИИ \\ 
+& ЯОЫЦЗУЛЫЫ К ЩЧАПИУ ФЙСЦ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОТЕЧЕСТВЕННОЙ ИНДУСТРИИ ИНФОРМАЦИИ ВКЛЮЧАЯ \\ 
+\textbf{Режим 2}  & ИНДУСТРИЮ СРЕДСТВ ИНФОРМАТИЗАЦИИ ТЕЛЕКОММУНИКАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Л \\ 
+& И СВЯЗИ ОБЕСПЕЧЕНИЮ ПОТРЕБНОСТЕЙ \\ 
+\textbf{Режим 4}  & ВНУТРЕННЕГО РЫНКА В ЕЕ \\ 
+\textbf{Режим 5}  & Пароль: ПРОДУКЦИИ \\ 
+& ПРОДУКЦИИ И ВЫХОДУ ЭТОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ППМУПРЧУТ ЛХ УЬЫТШЯФ ЯГЭЭЗ \\ 
+\textbf{Режим 2}  & А ЧСВУА ЩЭЬЩЛЭДКЯФЙ ИЙХЭЭЗЙЗЦЛ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ъ \\ 
+& НХЬХРЖЧЧЮЮЩ В НЧПАЫДАФББХТ ЭУЯЬФГЮФЕГЗЦЛ \\ 
+\textbf{Режим 4}  & ИъйтютмИйстггхУхъцопжКыкйарлЩзбькмфНйдегьвЖазлы \\ 
+\textbf{Режим 5}  & Пароль: РОССИЙСКОЙ \\ 
+& ЛКГЬЙЪЦХ ЛСШЩРАЪЖБТВАЩСБ УЪЯПДЛТ ОЫЦЦЫХЦУЫХ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПРОДУКЦИИ НА МИРОВОЙ РЫНОК \\ 
+\textbf{Режим 2}  & А ТАКЖЕ ОБЕСПЕЧЕНИЮ НАКОПЛЕНИЯ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ъ \\ 
+& СОХРАННОСТИ И ЭФФЕКТИВНОГО ИСПОЛЬЗОВАНИЯ \\ 
+\textbf{Режим 4}  & ОТЕЧЕСТВЕННЫХ ИНФОРМАЦИОННЫХ РЕСУРСОВ МОГУТ \\ 
+\textbf{Режим 5}  & Пароль: РОССИЙСКОЙ \\ 
+& ЯВЛЯТЬСЯ ПРОТИВОДЕЙСТВИЕ ДОСТУПУ РОССИЙСКОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ФГВВЧАЗРЛ Р ЩЩНЬАЙЬА НЯЛСЯЭМУЮКОЗУЖ \\ 
+\textbf{Режим 2}  & ЮЛШДДВГЬТХБ КИШНСЯЖЪЧНПККЗН Ц ОЛРППППЯАЪЪВМ \\ 
+\textbf{Режим 3}  & Индикаторная буква: И \\ 
+& ЦЖЭЪЪЯШ ЛУЫБФФАКЗТ ЭЭХПЙЩЮЩДШРДЫВ Я \\ 
+\textbf{Режим 4}  & ЙэосипРшжормЮхкскаЖээыулЦюцч \\ 
+\textbf{Режим 5}  & Пароль: СРЕДСТВ \\ 
+& РЮПСЦЮХРЙ ШКЖЦХЪРУЮЕЙШФН ЯИГШЪ ЦОЧЦЦЮГ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ФЕДЕРАЦИИ К НОВЕЙШИМ ИНФОРМАЦИОННЫМ \\ 
+\textbf{Режим 2}  & ТЕХНОЛОГИЯМ ВЗАИМОВЫГОДНОМУ И РАВНОПРАВНОМУ \\ 
+\textbf{Режим 2}  & Индикаторная буква: И \\ 
+& УЧАСТИЮ РОССИЙСКИХ ПРОИЗВОДИТЕЛЕЙ В \\ 
+\textbf{Режим 4}  & МИРОВОМ РАЗДЕЛЕНИИ ТРУДА В \\ 
+\textbf{Режим 5}  & Пароль: СРЕДСТВ \\ 
+& ИНДУСТРИИ ИНФОРМАЦИОННЫХ УСЛУГ СРЕДСТВ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАРЯАНЙЯШЖЪЯПЦ КЪЦЩЕЦЕДЧЪЫЛЭЦАЯ С РОЖФФ \\ 
+\textbf{Режим 2}  & ЫЩЙВЩБОДИТЯСДЫ ЬЬЭЦЬЮЭЗЩ Л ОБЕВЛ \\ 
+\textbf{Режим 3}  & Индикаторная буква: И \\ 
+& МГТЬКЫСЭ ВЫЬЯЖХХ ЧХЪ ЬЭПЖДЖЕУ \\ 
+\textbf{Режим 4}  & ЛхъэжюпМнпзыжсЙкихзйпАщчщейчИйыеъммЧффю \\ 
+\textbf{Режим 5}  & Пароль: ТЕХНОЛОГИЙ \\ 
+& ЦМУНВХС ЭЪПЧЧБАБЖЧС ЫНЗЭВВОНСХГНИТ ГАДЖЫШЪЧГЗ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНФОРМАТИЗАЦИИ ТЕЛЕКОММУНИКАЦИИ И СВЯЗИ \\ 
+\textbf{Режим 2}  & ИНФОРМАЦИОННЫХ ПРОДУКТОВ А ТАКЖЕ \\ 
+\textbf{Режим 2}  & Индикаторная буква: И \\ 
+& СОЗДАНИЕ УСЛОВИЙ ДЛЯ УСИЛЕНИЯ \\ 
+\textbf{Режим 4}  & ТЕХНОЛОГИЧЕСКОЙ ЗАВИСИМОСТИ РОССИИ В \\ 
+\textbf{Режим 5}  & Пароль: ТЕХНОЛОГИЙ \\ 
+& ОБЛАСТИ СОВРЕМЕННЫХ ИНФОРМАЦИОННЫХ ТЕХНОЛОГИЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЗМОСФЮЩ ЗОЩЫПУМЩ УЕЙЦЯЭГГГКЭТААЭ ЖЭЙССЮ \\ 
+\textbf{Режим 2}  & ЫВГВЩГБПГ ЫУОШААЦ ШКСХКЮРХЕЪУХЩВ ПУВАЫВЫБГУИЬЖВКХ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ч \\ 
+& Ф ТЧМШШ ЭЭЧ ЗВЧМНДЪ \\ 
+\textbf{Режим 4}  & КръьцьгХгфиыыжЛэлжлпюЭьщивямШлрвбшжВаци \\ 
+\textbf{Режим 5}  & Пароль: ЗАРУБЕЖНЫМ \\ 
+& ЫЙ ХЫЧШС ПЫЬЗЪКВЮШБМЕХЗЕ МУЮЯЮАЪЭПЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЗАКУПКА ОРГАНАМИ ГОСУДАРСТВЕННОЙ ВЛАСТИ \\ 
+\textbf{Режим 2}  & ИМПОРТНЫХ СРЕДСТВ ИНФОРМАТИЗАЦИИ ТЕЛЕКОММУНИКАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ч \\ 
+& И СВЯЗИ ПРИ НАЛИЧИИ \\ 
+\textbf{Режим 4}  & ОТЕЧЕСТВЕННЫХ АНАЛОГОВ НЕ УСТУПАЮЩИХ \\ 
+\textbf{Режим 5}  & Пароль: ЗАРУБЕЖНЫМ \\ 
+& ПО СВОИМ ХАРАКТЕРИСТИКАМ ЗАРУБЕЖНЫМ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОЩОЛДФУМ УЭПУМЩЯРАИ В БРКГОТТПЖФККЕО \\ 
+\textbf{Режим 2}  & ОАЧМУ ЧЙПЦЛЛЕЫТМ РРБИЭШЯШХАЖХПЮ ЭКЕЪООЛ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Б \\ 
+& ДЦЗЙЦЪЬЙБТФЙЯС ВФСХНСНЭАФЮШГСЦЙ М ЗЛТЩЩ \\ 
+\textbf{Режим 4}  & ЗщхэаГчайоСрбепБзчмбЗизлщМйжю \\ 
+\textbf{Режим 5}  & Пароль: ИНТЕЛЛЕКТУАЛЬНОЙ \\ 
+& МЪРУМЛХАЖШЙВ Л ЪРЙСГЦМПЛПКЮВДЪР ББАТРЕЧЦХЯКЕСМЮР \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОБРАЗЦАМ ВЫТЕСНЕНИЕ С ОТЕЧЕСТВЕННОГО \\ 
+\textbf{Режим 2}  & РЫНКА РОССИЙСКИХ ПРОИЗВОДИТЕЛЕЙ СРЕДСТВ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Б \\ 
+& ИНФОРМАТИЗАЦИИ ТЕЛЕКОММУНИКАЦИИ И СВЯЗИ \\ 
+\textbf{Режим 4}  & УВЕЛИЧЕНИЕ ОТТОКА ЗА РУБЕЖ \\ 
+\textbf{Режим 5}  & Пароль: ИНТЕЛЛЕКТУАЛЬНОЙ \\ 
+& СПЕЦИАЛИСТОВ И ПРАВООБЛАДАТЕЛЕЙ ИНТЕЛЛЕКТУАЛЬНОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И ЛХИЗФИФКСХЧЖВИМЖПЦИЗ ПЙУАЕЕН А \\ 
+\textbf{Режим 2}  & ЦЛММЯЛ УХА ЩЭК УЧХЧЮЬФСИЫЬ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Х \\ 
+& ГОЯ И ЫАКШЦПМЧХЛС ЗВ \\ 
+\textbf{Режим 4}  & ДьпннЦхтьяАщщпйЭддууШаухвРклщчЮжлцыЫб \\ 
+\textbf{Режим 5}  & Пароль: ИСПОЛЬЗОВАНИЕ \\ 
+& ДЙСЩМЯБЛХАЬГВТ ЦЧЫЗ Л ЬВОЙРКЮЪАПБМУ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И ТЕЛЕКОММУНИКАЦИОННЫХ СРЕДСТВ И \\ 
+\textbf{Режим 2}  & СИСТЕМ КАК УЖЕ РАЗВЕРНУТЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Х \\ 
+& ТАК И СОЗДАВАЕМЫХ НА \\ 
+\textbf{Режим 4}  & ТЕРРИТОРИИ РОССИИ МОГУТ ЯВЛЯТЬСЯ \\ 
+\textbf{Режим 5}  & Пароль: ИСПОЛЬЗОВАНИЕ \\ 
+& ПРОТИВОПРАВНЫЕ СБОР И ИСПОЛЬЗОВАНИЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАРЯАНЙБШЮ ХГКЭСЪЧДТ ЮЛШДДВГЬТА ЛХЛШШАБЭХ \\ 
+\textbf{Режим 2}  & ЫЩЙВЩБОДИН ШСЗЮСЖФЮЦ Д ЩОЗЛШБШЙНЫ \\ 
+\textbf{Режим 3}  & Индикаторная буква: К \\ 
+& А РРБХБЖЬИИГЖ ШЖЙЙЮЦЛ ЦЖЦЧЦМЫДЦЪЬ \\ 
+\textbf{Режим 4}  & ЬмуьщлЦоумщхБкхопмЪажжхцМиьжчаЪнокиэТрййир \\ 
+\textbf{Режим 5}  & Пароль: ИЗДЕЛИЯ \\ 
+& АБЗЯЧТЕЙЗТШЪЛ ЕИ ЖЬШ МББТАЮД \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНФОРМАЦИИ НАРУШЕНИЯ ТЕХНОЛОГИИ ОБРАБОТКИ \\ 
+\textbf{Режим 2}  & ИНФОРМАЦИИ ВНЕДРЕНИЕ В АППАРАТНЫЕ \\ 
+\textbf{Режим 2}  & Индикаторная буква: К \\ 
+& И ПРОГРАММНЫЕ ИЗДЕЛИЯ КОМПОНЕНТОВ \\ 
+\textbf{Режим 4}  & РЕАЛИЗУЮЩИХ ФУНКЦИИ НЕ ПРЕДУСМОТРЕННЫЕ \\ 
+\textbf{Режим 5}  & Пароль: ИЗДЕЛИЯ \\ 
+& ДОКУМЕНТАЦИЕЙ НА ЭТИ ИЗДЕЛИЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РЗНБЖЖСТКМ Ш НЪЭХХШООЮУЙЛЕРУ ДДЩИЩХУТ \\ 
+\textbf{Режим 2}  & Ы БВМРВУЗЪНАСЬЬ-АЖХПШХШЮФЖЕМУХЩМДЪХП ДТГГНТ О \\ 
+\textbf{Режим 3}  & Индикаторная буква: М \\ 
+& ЯЭХ ТЧФЖД ОЕШШРЕ РСОЫМЗ \\ 
+\textbf{Режим 4}  & НъгянУымвцЗьэьаЛмзлеФгечсИгытмЮбкхыГнд \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИИ \\ 
+& Ы ЕТВКЖЕ ЬЬЕИИВЩПЗ ЩИПЪЕВФЕЙЗ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РАЗРАБОТКА И РАСПРОСТРАНЕНИЕ ПРОГРАММ \\ 
+\textbf{Режим 2}  & И ИНФОРМАЦИОННО-ТЕЛЕКОММУНИКАЦИОННЫХ СИСТЕМ В \\ 
+\textbf{Режим 2}  & Индикаторная буква: М \\ 
+& ТОМ ЧИСЛЕ СИСТЕМ ЗАЩИТЫ \\ 
+\textbf{Режим 4}  & ПОДАВЛЕНИЕ ИЛИ РАЗРУШЕНИЕ СРЕДСТВ \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИИ \\ 
+& И СИСТЕМ ОБРАБОТКИ ИНФОРМАЦИИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ТЮКЧЗКЗШЭЮМЙБКГЩ В ЦЯНУУ НРСЭЭЬЫЫЮКШ \\ 
+\textbf{Режим 2}  & ЩЭ ЩКВЫАПАА-ННМЛЖЙРЦ ЭПККЪПС ГТФВПК \\ 
+\textbf{Режим 3}  & Индикаторная буква: Я \\ 
+& ЯАЦЪВЭДАССЛУЗЖСЬЪБ СШИИЙШ ЗВЗЫЫПЮЪВ Р \\ 
+\textbf{Режим 4}  & ЯйыцыбяЬшллъчдЬмгьюллЕоэкниэЬгуцьюлЭфылкчяЧэ \\ 
+\textbf{Режим 5}  & Пароль: КРИПТОГРАФИЧЕСКОЙ \\ 
+& А ХЕЗЛВНЩ ЪГЫАСЕНРЙЕЙЮЗЖАХЦ ВФЗФСФ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ТЕЛЕКОММУНИКАЦИИ И СВЯЗИ ВОЗДЕЙСТВИЕ \\ 
+\textbf{Режим 2}  & НА ПАРОЛЬНО-КЛЮЧЕВЫЕ СИСТЕМЫ ЗАЩИТЫ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Я \\ 
+& АВТОМАТИЗИРОВАННЫХ СИСТЕМ ОБРАБОТКИ И \\ 
+\textbf{Режим 4}  & ПЕРЕДАЧИ ИНФОРМАЦИИ КОМПРОМЕТАЦИЯ КЛЮЧЕЙ \\ 
+\textbf{Режим 5}  & Пароль: КРИПТОГРАФИЧЕСКОЙ \\ 
+& И СРЕДСТВ КРИПТОГРАФИЧЕСКОЙ ЗАЩИТЫ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИАРЯАНЙБШЮ ЬНМСПЛ ЕПОЦПДСЮЫБ ГВ \\ 
+\textbf{Режим 2}  & ЮЛШДЛЮАДБАБ АЗТЮЬЧИ ЧНЖПНЦОПЕ БПГМШЧЙЕДКЧ \\ 
+\textbf{Режим 3}  & Индикаторная буква: М \\ 
+& АЬЬЭХЧККВ ЩЙТ ПЛЦБЖСНЕФ АЫЪБЫЯЖВКХ \\ 
+\textbf{Режим 4}  & ЬяцужълшМжсхзжсьЫгщзорыжКфщкфръуАщ \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИИ \\ 
+& ЧДФБДЭЩЙ Ы ДТДСЭРЫЩ ХГПЪДЛОИЗЩ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИНФОРМАЦИИ УТЕЧКА ИНФОРМАЦИИ ПО \\ 
+\textbf{Режим 2}  & ТЕХНИЧЕСКИМ КАНАЛАМ ВНЕДРЕНИЕ ЭЛЕКТРОННЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: М \\ 
+& УСТРОЙСТВ ДЛЯ ПЕРЕХВАТА ИНФОРМАЦИИ \\ 
+\textbf{Режим 4}  & В ТЕХНИЧЕСКИЕ СРЕДСТВА ОБРАБОТКИ \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИИ \\ 
+& ХРАНЕНИЯ И ПЕРЕДАЧИ ИНФОРМАЦИИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПЙ ГСЪИРЭЛ ГФЗИИ Ю \\ 
+\textbf{Режим 2}  & ЮАГЫУ С ЕЛЕСИХУЦК ТЯИШВЖФЮГ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Щ \\ 
+& ОХГЛЧЧЫ ЫЙПЧТИДДДЭИБУУИ ШИПААЗ ННЦМХХЙЫОДД \\ 
+\textbf{Режим 4}  & АюхплрылЪхжюжкэмЦцихоцлхГжойпгдчНебвг \\ 
+\textbf{Режим 5}  & Пароль: УНИЧТОЖЕНИЕ \\ 
+& ПМ ПЯЧУМ ЬГЬЬШЬТСЙЫБСБ ЦФЪЖЙЯВНЯША \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПО КАНАЛАМ СВЯЗИ А \\ 
+\textbf{Режим 2}  & ТАКЖЕ В СЛУЖЕБНЫЕ ПОМЕЩЕНИЯ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Щ \\ 
+& ОРГАНОВ ГОСУДАРСТВЕННОЙ ВЛАСТИ ПРЕДПРИЯТИЙ \\ 
+\textbf{Режим 4}  & УЧРЕЖДЕНИЙ И ОРГАНИЗАЦИЙ НЕЗАВИСИМО \\ 
+\textbf{Режим 5}  & Пароль: УНИЧТОЖЕНИЕ \\ 
+& ОТ ФОРМЫ СОБСТВЕННОСТИ УНИЧТОЖЕНИЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПЙТЙУУЯЯРАИ РЗНБЛГЗИОЖ ШОЖ СПАДЖЕЩ \\ 
+\textbf{Режим 2}  & ФЕБЖОЗУН М ЩЮЗЫЩШ ДДМБЕСБИЯ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Р \\ 
+& ЙЖКЧЖМАЗРЛ ДАЪСМФОВ ИАРЯАНЙБШЮ Е \\ 
+\textbf{Режим 4}  & ЙяюамбьМжьжчмыШикшттцЙбо \\ 
+\textbf{Режим 5}  & Пароль: ДЕШИФРОВАНИЕ \\ 
+& КЕ ЯЫРЙЗИ ЧЬНЮЮ ПФШТЭРЗУНГШП \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПОВРЕЖДЕНИЕ РАЗРУШЕНИЕ ИЛИ ХИЩЕНИЕ \\ 
+\textbf{Режим 2}  & МАШИННЫХ И ДРУГИХ НОСИТЕЛЕЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Р \\ 
+& ИНФОРМАЦИИ ПЕРЕХВАТ ИНФОРМАЦИИ В \\ 
+\textbf{Режим 4}  & СЕТЯХ ПЕРЕДАЧИ ДАННЫХ И \\ 
+\textbf{Режим 5}  & Пароль: ДЕШИФРОВАНИЕ \\ 
+& НА ЛИНИЯХ СВЯЗИ ДЕШИФРОВАНИЕ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЭЙГБ ТЛДЫЛАЮЩФК Х НМЙЪЧЫЪВЮМГ \\ 
+\textbf{Режим 2}  & ЫВФЪХУУЧЮЭФРЯ Ч ЦВОКЛЩЩЙНШ РЪПГЪЛКМСБТАМР \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ь \\ 
+& ЦТПВВБЛФЬЬ ЫУОШААЦ ЮДБЧЭУ ЙЖКЧЖМАЗРЛ \\ 
+\textbf{Режим 4}  & МсьжчсяОксбъырЦнцтхоцАощщжлдЦшфьннуЙнокйыоЦхх \\ 
+\textbf{Режим 5}  & Пароль: СОЗДАНИИ \\ 
+& ЦКШЖЩ ЪЕЫ ЦЫИЦАЩЫЫ Р \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ЭТОЙ ИНФОРМАЦИИ И НАВЯЗЫВАНИЕ \\ 
+\textbf{Режим 2}  & ОТЕЧЕСТВЕННЫХ И ЗАРУБЕЖНЫХ ИНФОРМАЦИОННЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ь \\ 
+& ТЕХНОЛОГИЙ СРЕДСТВ ЗАЩИТЫ ИНФОРМАЦИИ \\ 
+\textbf{Режим 4}  & СРЕДСТВ ИНФОРМАТИЗАЦИИ ТЕЛЕКОММУНИКАЦИИ И \\ 
+\textbf{Режим 5}  & Пароль: СОЗДАНИИ \\ 
+& СВЯЗИ ПРИ СОЗДАНИИ И \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РЗНЗЭБКХ СНЬИЖЖФЧШЙ ЕПОЦПДСЮЫГВРРА СУЩБЖУУЯТХССЭЫ \\ 
+\textbf{Режим 2}  & ЩЯЪКЫАДИТЯФАЬПМФКЛЖ ЕЗХХХЖ Е ГМЮЕМЩНПТА \\ 
+\textbf{Режим 3}  & Индикаторная буква: Г \\ 
+& ОЩИШГБИВЪЧС А СИЩЫФМ Я \\ 
+\textbf{Режим 4}  & ЭнэтэцсМмээщуэНндйюащПкзхпэсБппск \\ 
+\textbf{Режим 5}  & Пароль: РАСПРОСТРАНЕНИЕ \\ 
+& ШБЙПЮСЗРЮЩЫ ФН ЕЕХЦЙСХЩЙТЮЛЩША ЫФЭЙЙИРЕРГ. \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РАЗВИТИИ РОССИЙСКОЙ ИНФОРМАЦИОННОЙ ИНФРАСТРУКТУРЫ \\ 
+\textbf{Режим 2}  & НЕСАНКЦИОНИРОВАННЫЙ ДОСТУП К ИНФОРМАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Г \\ 
+& НАХОДЯЩЕЙСЯ В БАНКАХ И \\ 
+\textbf{Режим 4}  & БАЗАХ ДАННЫХ НАРУШЕНИЕ ЗАКОННЫХ \\ 
+\textbf{Режим 5}  & Пароль: РАСПРОСТРАНЕНИЕ \\ 
+& ОГРАНИЧЕНИЙ НА РАСПРОСТРАНЕНИЕ ИНФОРМАЦИИ. \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИЫЫЯВИОХШ СМФОЙ ЙЖКЧЖМАЗРДГЩЩУ ФИЬББЮБССААЗ \\ 
+\textbf{Режим 2}  & ОЮЗШЪЪЧГЕР ПАССЩХЕЬИ УАЗАЦЗЧЧОГВЭКЛ ЖЫ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Э \\ 
+& ИРЬЦБЬФ Н ШСБТСЖФКЖЙ. Ж \\ 
+\textbf{Режим 4}  & НьщающбЧьфубящЙнокйэиМяэнсеяФъкьскдЫгцачжзМяг \\ 
+\textbf{Режим 5}  & Пароль: ВОЕННЫХ \\ 
+& ЦБЭЕМШХШБВП ЪЖУЦЩШЖАЗТЦД ГЛГЧЛЮСБАЕЙЯИ КЭАЩЧЖИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ИСТОЧНИКИ УГРОЗ ИНФОРМАЦИОННОЙ БЕЗОПАСНОСТИ \\ 
+\textbf{Режим 2}  & РОССИЙСКОЙ ФЕДЕРАЦИИ ПОДРАЗДЕЛЯЮТСЯ НА \\ 
+\textbf{Режим 2}  & Индикаторная буква: Э \\ 
+& ВНЕШНИЕ И ВНУТРЕННИЕ. К \\ 
+\textbf{Режим 4}  & ВНЕШНИМ ИСТОЧНИКАМ ОТНОСЯТСЯ ДЕЯТЕЛЬНОСТЬ \\ 
+\textbf{Режим 5}  & Пароль: ВОЕННЫХ \\ 
+& ИНОСТРАННЫХ ПОЛИТИЧЕСКИХ ЭКОНОМИЧЕСКИХ ВОЕННЫХ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РЗНЗХЗДЧЙЯЧОРОБИ Й МЧХПЧЕЯШЛЪЩВШМ ЩЩЛВЬЫЫА \\ 
+\textbf{Режим 2}  & ЩЭЩЩХКАФАЯЧЦ ССНСЮЕ ЧЗФДЗГШПБ ПМЦЙЫЫДБРА \\ 
+\textbf{Режим 3}  & Индикаторная буква: Л \\ 
+& ФГВВЧАЗРЛ С БВМРВУЗЪНАСЬЬХ САПЭЙ \\ 
+\textbf{Режим 4}  & ЙяасюШаяфтСрбйьВдвкфЧтчсн \\ 
+\textbf{Режим 5}  & Пароль: ИНТЕРЕСОВ \\ 
+& АГМШЮШЙЫГИЩГЪ Й ЯХНЮВАЙШЫ ШДЩЕЕАЖЭЩ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РАЗВЕДЫВАТЕЛЬНЫХ И ИНФОРМАЦИОННЫХ СТРУКТУР \\ 
+\textbf{Режим 2}  & НАПРАВЛЕННАЯ ПРОТИВ ИНТЕРЕСОВ РОССИЙСКОЙ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Л \\ 
+& ФЕДЕРАЦИИ В ИНФОРМАЦИОННОЙ СФЕРЕ \\ 
+\textbf{Режим 4}  & СТРЕМЛЕНИЕ РЯДА СТРАН К \\ 
+\textbf{Режим 5}  & Пароль: ИНТЕРЕСОВ \\ 
+& ДОМИНИРОВАНИЮ И УЩЕМЛЕНИЮ ИНТЕРЕСОВ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РБЛЫЭФ Ж НОЬЭМКЗ ПШЭЮШЦУХЩМДЪЪВ \\ 
+\textbf{Режим 2}  & ЯЯИССНЪОФФЩЪ РСШРЧЕБЪЫФ ЯС Г \\ 
+\textbf{Режим 3}  & Индикаторная буква: Н \\ 
+& ЬВСПЫНКУ Н ШСБТСЖФКЦЕО ЦЮФЖЮЙТОВЕЪГОЦ \\ 
+\textbf{Режим 4}  & ЗлпуябШоузулЛхзъжмМжфжючЛкжлзюГмохжюГхоюифЛъжнмм \\ 
+\textbf{Режим 5}  & Пароль: ТЕХНОЛОГИЯМИ \\ 
+& ЩЕ ЛИТЛЭГГВЖ ЫЙАЛДУЛЕЧЪЕЭХМШ ГАДЖЫШЪУЗНМШ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РОССИИ В МИРОВОМ ИНФОРМАЦИОННОМ \\ 
+\textbf{Режим 2}  & ПРОСТРАНСТВЕ ВЫТЕСНЕНИЮ ЕЕ С \\ 
+\textbf{Режим 2}  & Индикаторная буква: Н \\ 
+& ВНЕШНЕГО И ВНУТРЕННЕГО ИНФОРМАЦИОННЫХ \\ 
+\textbf{Режим 4}  & РЫНКОВ ОБОСТРЕНИЕ МЕЖДУНАРОДНОЙ КОНКУРЕНЦИИ \\ 
+\textbf{Режим 5}  & Пароль: ТЕХНОЛОГИЯМИ \\ 
+& ЗА ОБЛАДАНИЕ ИНФОРМАЦИОННЫМИ ТЕХНОЛОГИЯМИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И БХУБЯЯМКЮ ЙЙВФДПАППЖЖН ЪУУЯМРКВЫФТЙВ \\ 
+\textbf{Режим 2}  & ЫВЫЙШЧ ЖШЖАЛЮЯ ММХЕЛР ЦЪЧА \\ 
+\textbf{Режим 3}  & Индикаторная буква: В \\ 
+& Ц ЮЛШБНГУЯДЛТ БЦ НРСУБЭААУУШХ \\ 
+\textbf{Режим 4}  & ВозохзфцДмфцпшиьБлдтшчъвСсдрищедЭымъявещБшжчшчыпШцг \\ 
+\textbf{Режим 5}  & Пароль: ДЕЯТЕЛЬНОСТЬ \\ 
+& НЭПЖШЙЙЛСЮ ГЪЯЭЦМЕНЛГБДИЖ ЬЧШЙЭПДССВ ЛУЪСЫЕЩЖДЕЩЭ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & И РЕСУРСАМИ ДЕЯТЕЛЬНОСТЬ МЕЖДУНАРОДНЫХ \\ 
+\textbf{Режим 2}  & ОТРЫВА ВЕДУЩИХ ДЕРЖАВ МИРА \\ 
+\textbf{Режим 2}  & Индикаторная буква: В \\ 
+& И НАРАЩИВАНИЕ ИХ ВОЗМОЖНОСТЕЙ \\ 
+\textbf{Режим 4}  & ПО ПРОТИВОДЕЙСТВИЮ СОЗДАНИЮ КОНКУРЕНТОСПОСОБНЫХ \\ 
+\textbf{Режим 5}  & Пароль: ДЕЯТЕЛЬНОСТЬ \\ 
+& РОССИЙСКИХ ИНФОРМАЦИОННЫХ ТЕХНОЛОГИЙ ДЕЯТЕЛЬНОСТЬ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & КНЬХЖАМКПМФ ЛПЩЫЖОЪХП РВЩЩАЬГ Н \\ 
+\textbf{Режим 2}  & ЩЭАЬББПГ ЛХРЬХЛЖЬЗЖС П ЦЮАФ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Т \\ 
+& ЖПЫУЙЙЬ (ИТИЛК) ЛШЭШОШФО ЗФФННКВЮЖЯК \\ 
+\textbf{Режим 4}  & ВъзкэдвЦяатчяцЯрцяамчЧнчтпзяВюъзкэдЛлзохв \\ 
+\textbf{Режим 5}  & Пароль: ПРЕДУСМАТРИВАЮЩИХ \\ 
+& ЭШФТВМБЩЪ ЙГНЙБШИМКШФКЬЮ ЦЙЪЮ ДХЛХНМБПКИЮЫСДФГН \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & КОСМИЧЕСКИХ ВОЗДУШНЫХ МОРСКИХ И \\ 
+\textbf{Режим 2}  & НАЗЕМНЫХ ТЕХНИЧЕСКИХ И ИНЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Т \\ 
+& СРЕДСТВ (ВИДОВ) РАЗВЕДКИ ИНОСТРАННЫХ \\ 
+\textbf{Режим 4}  & ГОСУДАРСТВ РАЗРАБОТКА РЯДОМ ГОСУДАРСТВ \\ 
+\textbf{Режим 5}  & Пароль: ПРЕДУСМАТРИВАЮЩИХ \\ 
+& КОНЦЕПЦИЙ ИНФОРМАЦИОННЫХ ВОЙН ПРЕДУСМАТРИВАЮЩИХ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СЭЖЙГЗЦД ОШЩРЖЖТ ЕЕИЕВВНЛ КБНХХЭТТПЗД \\ 
+\textbf{Режим 2}  & ЩЭ ТЛДЫЛАЮЩФСИНЩЧ ИСЙКУ ЪЗХРЪО \\ 
+\textbf{Режим 3}  & Индикаторная буква: П \\ 
+& ТТСМФ ХЖФЩ ШРЗХНВЙЩЫ ДДЕВЭЫШЫЫКУ \\ 
+\textbf{Режим 4}  & ЭдудеДпхифГсфгоЙнияаСррджФвглфХмялыОбчдрЕчьяиДифм \\ 
+\textbf{Режим 5}  & Пароль: ДОСТУПА \\ 
+& ЭЫГШФЗМЮН ДРЮПМЗЕРЦЦКПФКСЙЦСБФ ЭЕЖШБЦД А \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СОЗДАНИЕ СРЕДСТВ ОПАСНОГО ВОЗДЕЙСТВИЯ \\ 
+\textbf{Режим 2}  & НА ИНФОРМАЦИОННЫЕ СФЕРЫ ДРУГИХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: П \\ 
+& СТРАН МИРА НАРУШЕНИЕ НОРМАЛЬНОГО \\ 
+\textbf{Режим 4}  & СИСТЕМ СОХРАННОСТИ ИНФОРМАЦИОННЫХ РЕСУРСОВ \\ 
+\textbf{Режим 5}  & Пароль: ДОСТУПА \\ 
+& ПОЛУЧЕНИЕ НЕСАНКЦИОНИРОВАННОГО ДОСТУПА К \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НЗК. З ЕОНФОЪЧПЪМ ЩППДЮЩУБКБ \\ 
+\textbf{Режим 2}  & ЫВТТБПУАМ ХИЮИЧЯЕХЦЖЩ ЮЦЧЧЕИГБЯ ВЪИМЭЛЛШОЬИГУ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ц \\ 
+& ЖИСЯЦЪФФФЩЪЧПЬО Щ ГЙЛЩБВФБЮБПГ ЫЫТБФААИ \\ 
+\textbf{Режим 4}  & ХфяыдКрщыкЮгнтаЙнихяЧлотоВозжэЖгхяэЦй \\ 
+\textbf{Режим 5}  & Пароль: ДОСТУПА \\ 
+& ЗРРМЪЬАОЖДИЙК ЧЬРЧДШБПДУР ЛПТЖСЛС Д \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НИМ. К ВНУТРЕННИМ ИСТОЧНИКАМ \\ 
+\textbf{Режим 2}  & ОТНОСЯТСЯ КРИТИЧЕСКОЕ СОСТОЯНИЕ ОТЕЧЕСТВЕННЫХ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ц \\ 
+& ГОСУДАРСТВЕННЫХ И КРИМИНАЛЬНЫХ СТРУКТУР \\ 
+\textbf{Режим 4}  & В ИНФОРМАЦИОННОЙ СФЕРЕ ПОЛУЧЕНИЯ \\ 
+\textbf{Режим 5}  & Пароль: ДОСТУПА \\ 
+& КРИМИНАЛЬНЫМИ СТРУКТУРАМИ ДОСТУПА К \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & КНФЯЖММШИМЫЙСЙЙЩ РЪПГЪЛКМСЬ ВЫЭИЗИОЕ ЙОЖЩЗЦЛ \\ 
+\textbf{Режим 2}  & ЫЛХЮЯФХЬПМФККЖ ХХДОООЧЙЙППЛ ГН АТЯЫЖ \\ 
+\textbf{Режим 3}  & Индикаторная буква: У \\ 
+& ПУФЫЦЦСН ДРАЬНУИЖ ББЗСЮЭШ ЖЪУПАДЖЧЧЮЮЩ \\ 
+\textbf{Режим 4}  & РмрпшГооысЮналкВхекзОкфроЬбтьъКрфчьИмйси \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& Ы СВВФЧАЯМЩЬН К ОГЦВРЖМОХЪБЩГЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & КОНФИДЕНЦИАЛЬНОЙ ИНФОРМАЦИИ УСИЛЕНИЯ ВЛИЯНИЯ \\ 
+\textbf{Режим 2}  & ОРГАНИЗОВАННОЙ ПРЕСТУПНОСТИ НА ЖИЗНЬ \\ 
+\textbf{Режим 2}  & Индикаторная буква: У \\ 
+& ОБЩЕСТВА СНИЖЕНИЯ СТЕПЕНИ ЗАЩИЩЕННОСТИ \\ 
+\textbf{Режим 4}  & ЗАКОННЫХ ИНТЕРЕСОВ ГРАЖДАН ОБЩЕСТВА \\ 
+\textbf{Режим 5}  & Пароль: ИНФОРМАЦИОННОЙ \\ 
+& И ГОСУДАРСТВА В ИНФОРМАЦИОННОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & САПЭЙ ЗЕЪЮЗЗУЮЙОДЬН ЛЩВЩНСУШГЭП ШШМЯЧОРООККМ \\ 
+\textbf{Режим 2}  & МЬННЛШСЙСДЫ ИЬЦДХХЪ ЪШОХВУЧЧЧАУГЩЩУ ЭУОРРН \\ 
+\textbf{Режим 3}  & Индикаторная буква: Й \\ 
+& ИЬЦДХХЪ ЪШОХВУЧЧЧАУГЩЩУ ЭУОРРН БЫЧГЮХСФЕ \\ 
+\textbf{Режим 4}  & РошххйцЮыьтивкМчжьмбзШибущуыУйъжпыуЛжмб \\ 
+\textbf{Режим 5}  & Пароль: ГОСУДАРСТВЕННОЙ \\ 
+& Ч РБУОЩМСХЦШ АЯСНХЯ ТПИЮЪСЧКСЬАБНХЯ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & СФЕРЕ НЕДОСТАТОЧНАЯ КООРДИНАЦИЯ ДЕЯТЕЛЬНОСТИ \\ 
+\textbf{Режим 2}  & ФЕДЕРАЛЬНЫХ ОРГАНОВ ГОСУДАРСТВЕННОЙ ВЛАСТИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Й \\ 
+& ОРГАНОВ ГОСУДАРСТВЕННОЙ ВЛАСТИ СУБЪЕКТОВ \\ 
+\textbf{Режим 4}  & РОССИЙСКОЙ ФЕДЕРАЦИИ ПО ФОРМИРОВАНИЮ \\ 
+\textbf{Режим 5}  & Пароль: ГОСУДАРСТВЕННОЙ \\ 
+& И РЕАЛИЗАЦИИ ЕДИНОЙ ГОСУДАРСТВЕННОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПЙЪРЦЫЛУ Н РКТЗЛЛЭ ЯЧШЯИЧУЦОПР \\ 
+\textbf{Режим 2}  & ЫЩЙВЩБОДИТЯССК ЦЖЮФФГФШШООД ЖЦЧПРРМЛЩУ ЕИЭЭЫЮЩФК \\ 
+\textbf{Режим 3}  & Индикаторная буква: П \\ 
+& ЧЦЗЩ ИПМИЮЦОКУИВЪ ЙЧДДШАВТХ Ф \\ 
+\textbf{Режим 4}  & ВцшнзхКыкйарУццпдюРэдодрВфвчме \\ 
+\textbf{Режим 5}  & Пароль: ОБЩЕСТВА \\ 
+& СПФСРЮЭЖЫЛ ДИСВДАБШЖЭТЦ ЗТЦЩФСАТ Ц \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ПОЛИТИКИ В ОБЛАСТИ ОБЕСПЕЧЕНИЯ \\ 
+\textbf{Режим 2}  & ИНФОРМАЦИОННОЙ БЕЗОПАСНОСТИ РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: П \\ 
+& БАЗЫ РЕГУЛИРУЮЩЕЙ ОТНОШЕНИЯ В \\ 
+\textbf{Режим 4}  & ИНФОРМАЦИОННОЙ СФЕРЕ А ТАКЖЕ \\ 
+\textbf{Режим 5}  & Пароль: ОБЩЕСТВА \\ 
+& ИНСТИТУТОВ ГРАЖДАНСКОГО ОБЩЕСТВА И \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НЖПФННЩФШИЧСД ЫЙПЧТИДДДЭИБУЦИ ИЯЬТСНХВ ЧГ \\ 
+\textbf{Режим 2}  & ОЛДЛЪЮЩЫЪ ЛГЦЩГЫХЕЬУАЯЯЮЬ СЩФЗЪ ФОКХМЕ \\ 
+\textbf{Режим 3}  & Индикаторная буква: К \\ 
+& ЛИЭБЛЛЖБСРННЧ ЯЖОЩШХМШЧЫТМВБ ГТДЩЩЩЯЗВИИ ТЯ \\ 
+\textbf{Режим 4}  & ЩимемкНнчббщЪцйкниЩщэоязЗзшжябФрвлтпЦшафцйЮятец \\ 
+\textbf{Режим 5}  & Пароль: СИСТЕМЫ \\ 
+& ТЪЦШПМШЦЙАТ ЬЭЕЫТДГЧ ЪКЖТЩЮШЦЧЕМПГ ЬЗЗПТЪИ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & НЕДОСТАТОЧНЫЙ ГОСУДАРСТВЕННЫЙ КОНТРОЛЬ ЗА \\ 
+\textbf{Режим 2}  & РАЗВИТИЕМ ИНФОРМАЦИОННОГО РЫНКА РОССИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: К \\ 
+& НЕДОСТАТОЧНОЕ ФИНАНСИРОВАНИЕ МЕРОПРИЯТИЙ ПО \\ 
+\textbf{Режим 4}  & ФЕДЕРАЦИИ НЕДОСТАТОЧНАЯ ЭКОНОМИЧЕСКАЯ МОЩЬ \\ 
+\textbf{Режим 5}  & Пароль: СИСТЕМЫ \\ 
+& ГОСУДАРСТВА СНИЖЕНИЕ ЭФФЕКТИВНОСТИ СИСТЕМЫ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОЩОЛДЧЫТМВЬ Л СГДЩАГОУИЖ ЯОШЬЯЯЕЬКАЗЗД \\ 
+\textbf{Режим 2}  & УЛТЬДКББЖЬ КЦЕОЖЬПЬЙЗЖЛУЙМЭЮ ВИЯЪВЭ Ф \\ 
+\textbf{Режим 3}  & Индикаторная буква: Ы \\ 
+& ЖЫМТЧЧР ДЬАДЩЬЙНУИЖ ЭСЫЬСФЕТЖХЗШШЙ ЛЩГЦЦЯЦЪЪЕЕТ \\ 
+\textbf{Режим 4}  & ЖяхоаЖбыжыЦьрицРлрпкЙопниЛохтфЖхохуЧчимсЮйщтбШхштуЗх \\ 
+\textbf{Режим 5}  & Пароль: ГОСУДАРСТВЕННОЙ \\ 
+& ЕЫЦЗЦАОЦЮГЧЩЩЫХ ДТСЮЬЩ ШЙЫВФГЬ ФИЭГУУНЧКАРШФГЫ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ОБРАЗОВАНИЯ И ВОСПИТАНИЯ НЕДОСТАТОЧНОЕ \\ 
+\textbf{Режим 2}  & КОЛИЧЕСТВО КВАЛИФИЦИРОВАННЫХ КАДРОВ В \\ 
+\textbf{Режим 2}  & Индикаторная буква: Ы \\ 
+& ОБЛАСТИ ОБЕСПЕЧЕНИЯ ИНФОРМАЦИОННОЙ БЕЗОПАСНОСТИ \\ 
+\textbf{Режим 4}  & НЕДОСТАТОЧНАЯ АКТИВНОСТЬ ФЕДЕРАЛЬНЫХ ОРГАНОВ \\ 
+\textbf{Режим 5}  & Пароль: ГОСУДАРСТВЕННОЙ \\ 
+& ГОСУДАРСТВЕННОЙ ВЛАСТИ ОРГАНОВ ГОСУДАРСТВЕННОЙ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ВЦБЮЮЩ ПЧСОАЫДРФ РБЛЫЭЭТФИО АПЙЙКВИМЕ \\ 
+\textbf{Режим 2}  & Г ЙЖКЧЖМЩЦЕЯИЩУТ РКЦЭЛЛШЧ С \\ 
+\textbf{Режим 3}  & Индикаторная буква: Э \\ 
+& ДНРИЯ ФФЖЫОНДННЬЬЖ Д КВМЯБШЦРМВР \\ 
+\textbf{Режим 4}  & ТпчгйгКыкьыюЧртогоТйгъбзЪкэожэВзгвшцФт \\ 
+\textbf{Режим 5}  & Пароль: РЕСУРСОВ \\ 
+& ШСЩЖТПЧИ ГЭЦЗЪСРККЙБЦЮФД ХДЬЧЖХЕК Ц \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ВЛАСТИ СУБЪЕКТОВ РОССИЙСКОЙ ФЕДЕРАЦИИ \\ 
+\textbf{Режим 2}  & В ИНФОРМИРОВАНИИ ОБЩЕСТВА О \\ 
+\textbf{Режим 2}  & Индикаторная буква: Э \\ 
+& СВОЕЙ ДЕЯТЕЛЬНОСТИ В РАЗЪЯСНЕНИИ \\ 
+\textbf{Режим 4}  & ПРИНИМАЕМЫХ РЕШЕНИЙ В ФОРМИРОВАНИИ \\ 
+\textbf{Режим 5}  & Пароль: РЕСУРСОВ \\ 
+& ОТКРЫТЫХ ГОСУДАРСТВЕННЫХ РЕСУРСОВ И \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РЗНЗЭБКХ ЯЗЬЬЦЗБ ДШОООЧТ Ъ \\ 
+\textbf{Режим 2}  & ЩУЛ НВОНКЮЯ ЯУААМЙДХЧМ ХШОЗДЪ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Х \\ 
+& ЛЩ ХФХЛЪКЫ ЯЯИДХ ЗПХР \\ 
+\textbf{Режим 4}  & ЕнэяиэДмкгюкЙуисэйЧбфкчвЧффлозЯыцяънЩзбь \\ 
+\textbf{Режим 5}  & Пароль: ОРГАНОВ \\ 
+& ЫОЕАЩЫГ ФШЭЮЯОХВКДЛЩБЗЯ ЩШАЕЩЦ ЫОЕАЩЫГ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & РАЗВИТИИ СИСТЕМЫ ДОСТУПА К \\ 
+\textbf{Режим 2}  & НИМ ГРАЖДАН ОТСТАВАНИЕ РОССИИ \\ 
+\textbf{Режим 2}  & Индикаторная буква: Х \\ 
+& ОТ ВЕДУЩИХ СТРАН МИРА \\ 
+\textbf{Режим 4}  & ПО УРОВНЮ ИНФОРМАТИЗАЦИИ ФЕДЕРАЛЬНЫХ \\ 
+\textbf{Режим 5}  & Пароль: ОРГАНОВ \\ 
+& ОРГАНОВ ГОСУДАРСТВЕННОЙ ВЛАСТИ ОРГАНОВ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\begin{exercise}\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ГЮЗОРТПППЯТЩВВТ ФТЗЛЛЭ УБПЩЖОЬКД КЗХОЕЕЮДЙЩ \\ 
+\textbf{Режим 2}  & МЬННЛШГЭФ К ЬСПЕККД ШЕХХЧЧЛЦ \\ 
+\textbf{Режим 3}  & Индикаторная буква: Г \\ 
+& ЭМЖУОЙЧЛЦ ЗМЛИЛЕЕНК ЛХЛШЭАЮПИОЕ ЮЦЭГЪЗШЭШБЦРМВЬ \\ 
+\textbf{Режим 4}  & НецадСфчцгФеитэИхйи \\ 
+\textbf{Режим 5}  & Пароль: ПОСЛЕДНИЕ \\ 
+& ЮРСДПДЩ. БЕ ЯЫЦПЧЦЩЫЧ ЮЫУА \\ 
+	\end{tabular} 
+\end{table}
+
+\end{exercise}
+\begin{solution}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{r l}\textbf{Режим 1}  & ГОСУДАРСТВЕННОЙ ВЛАСТИ СУБЪЕКТОВ РОССИЙСКОЙ \\ 
+\textbf{Режим 2}  & ФЕДЕРАЦИИ И ОРГАНОВ МЕСТНОГО \\ 
+\textbf{Режим 2}  & Индикаторная буква: Г \\ 
+& СЕЛЬСКОГО ХОЗЯЙСТВА ОБРАЗОВАНИЯ ЗДРАВООХРАНЕНИЯ \\ 
+\textbf{Режим 4}  & СФЕРЫ УСЛУГ И БЫТА \\ 
+\textbf{Режим 5}  & Пароль: ПОСЛЕДНИЕ \\ 
+& ГРАЖДАН. ЗА ПОСЛЕДНИЕ ГОДЫ \\ 
+	\end{tabular} 
+\end{table}
+
+\end{solution}
+\end{document}
