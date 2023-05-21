@@ -1,5 +1,5 @@
 import re
-import nltk
+# import nltk
 
 
 # транспозиция букв слов
@@ -61,45 +61,52 @@ def check_words(text):
     return True
 
 
-def break_(encText):
-    global alphabet
-    global letterDict
-    key = ''
-    for i in range(len(alphabet)):
-        key = alphabet[i]
-        decText = decrypt(encText, key, letterDict)
-        if check_words(decText):
-            print(decText)
-    key = ''
-    for j in alphabet:
-        for k in alphabet:
-            key = j + k
-            decText = decrypt(encText, key, letterDict)
-            if check_words(decText):
-                print(decText)
-    key = ''
-    for i in alphabet:
-        for j in alphabet:
-            for k in alphabet:
-                key = i + j + k
-                decText = decrypt(encText, key, letterDict)
-                if check_words(decText):
-                    print(decText)
+# def break_(encText):
+#     global alphabet
+#     global letterDict
+#     key = ''
+#     for i in range(len(alphabet)):
+#         key = alphabet[i]
+#         decText = decrypt(encText, key, letterDict)
+#         if check_words(decText):
+#             print(decText)
+#     key = ''
+#     for j in alphabet:
+#         for k in alphabet:
+#             key = j + k
+#             decText = decrypt(encText, key, letterDict)
+#             if check_words(decText):
+#                 print(decText)
+#     key = ''
+#     for i in alphabet:
+#         for j in alphabet:
+#             for k in alphabet:
+#                 key = i + j + k
+#                 decText = decrypt(encText, key, letterDict)
+#                 if check_words(decText):
+#                     print(decText)
 
 
 # задаем словари для преобразования букв в коды и наоборот
 alphabet = 'абвгдежзиклмнопрстуфхцчшщъыьэюя '
 codeDict = {let: alphabet.index(let) for let in alphabet}
 letterDict = {i: alphabet[i] for i in range(len(alphabet))}
-dictionary = enchant.Dict("ru_RU")
+# dictionary = enchant.Dict("ru_RU")
 
 # text = prepareText(input())
 # key = 'вшэ'
 # encryptedText = encrypt(text, key, codeDict)
 # print(decTextToStr(encryptedText, letterDict))
 
-text = "дшхзшэпсююнрнабрш ифоэобущюмкююуэмюбрирфдююсдфуыл рщфрвъдпгнзгвпоюитэлуцичэсощюсъпывуоспоцшиылоцкнашопюкя" \
-       " оцкубаьывяююняпгхвуеъгрвюшюсрзчмпобхфющояуящвоцпоюгшывщржусощрфдтрирщфмфоую гсьцуоамясмуаюгжг" \
-       " люяафнмюуэоэфэо фсссьрфдтрируавпкбю ъвьэлобхфющо нвюсямфнаюырръгоящюаэю яргвкобх рп рмсасиэл"
+# text = "дшхзшэпсююнрнабрш ифоэобущюмкююуэмюбрирфдююсдфуыл рщфрвъдпгнзгвпоюитэлуцичэсощюсъпывуоспоцшиылоцкнашопюкя" \
+#        " оцкубаьывяююняпгхвуеъгрвюшюсрзчмпобхфющояуящвоцпоюгшывщржусощрфдтрирщфмфоую гсьцуоамясмуаюгжг" \
+#        " люяафнмюуэоэфэо фсссьрфдтрируавпкбю ъвьэлобхфющо нвюсямфнаюырръгоящюаэю яргвкобх рп рмсасиэл"
+#
+# break_(text)
 
-break_(text)
+text = 'абабаб'
+key = 'вг'
+
+encryptedText = encrypt(text, key, codeDict)
+print(encryptedText)
+print(decTextToStr(encryptedText, letterDict))

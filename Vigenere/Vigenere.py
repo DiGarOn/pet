@@ -5,6 +5,7 @@ from nltk.corpus import words
 import itertools
 import math
 from frases import create_phrases
+import main
 
 
 alfo = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -105,7 +106,7 @@ def f(text: str, keys: list):
     for i in keys:
         if i.upper() in text:
             count += 1
-        if count > 5:
+        if count > 2:
             return True
     return False
 
@@ -197,19 +198,22 @@ ZAIJIHBXESYSEWTAQIEMUUCFXOSSDIMHAMEYRMSXAVYXSVHIXXOSNJILWHOL\
 PQBVSYWUFHIWFTSDSLWEURNZIUKYFXZBCXJSWHYEICOLXPZFLLLMBSHZAYDX\
 VINWZLFSLVLSNZEAVUVEUMIFIPBCLXOSMWXOSSYYHFXWHACI"
 
-text_11 = "IHNBKTEBWCQNLSKTACTFXLXKVPHJRSQCXAVGNLCDROAHRNLNVVMDMSUUAVXL" \
-          "ETJPFGTCCKMKNHVMPAOPOOVSRZDQOMQSXAVIICVDQAUWKFLNGKUFODVDHJDJ" \
-          "NUCVVYEJBKUTTWEPLHOEPWQOKIODZUKODRFUFJBLZIWJZFEMRNMROQRYEJBU" \
-          "TUWUYUSCVZZGBIGUNHCLDHJZCIICVFGTJKFDDXTVJPUOEMTRCE"
+text_11 = "FLHPLEWDGPIEVLZIEQDCAYJHWKQDDPUXZADZSWTZAHLFQUGXLERSUTSQLRBM" \
+          "UXHXNQTWWSQRLNDBMWEZREOLNMVHHPEXXBMQHKIDBSRREAIVARMMQSPHIUAW" \
+          "FMPEDARQADFCMARSIGSEARHSTZXKEQXSRRLNMWLZIJRRRAFOIYEEWLPMWWFZ" \
+          "DXKEMUKRNPEXKOFSLWBTXFRNZFOQOHURJTSMXHVPZXKEMUKRNPEKRAWARJAE" \
+          "MKUELFWSEPPWWOZBMQGWAAZIETXKETDLDNOEEOMZEXRNETIJRZGRG"
 
-print(break_Vigenere(text_11,5))
+
+
+# print(break_Vigenere(text_11,5))
 
 
 text_1 = 'LPBZHSIYBZPWQWGKGOUEWCGSCVAEVDZGZTKXMZQBLAKFONWFPCUOPFGFAJEURZHMLVRAMGYSYXLRUQABJNLAOPEVFLWMSOJRIWELQHWCGBJZOQLXUFZZAVBKMNTKTWGIRFCTXYBPRXZNJTUPFUSBPVTQ'
 
 
 text_2 = 'HUIDSHEUUYMBXBZVRHFWQGPCPWRNVAIYHVBPXCUJIJQOAXTTDXKRYBBAFVLXVBPVSBZAAQSBXBQSRTTPEBLRRXPAGFPBKABJBLQIGRWFGSFVPQKLCSFBZVGKBDBRPDZESHUMYGPPHVFXGJGNFSSSAVQWCQRSUNMZ'
-key = 'SIXMOLECULESOFSODIUMHYDROXIDEPLUSTHREEMOLECULESOFCHLORINEPRODUCESONEMOLECULEOFSODIUMCHLORATEFIVEMOLECULESOFSODIUMCHLORIDEANDTHREEMOLECULESOFWATER'
+key = 'onemoleculeof|potassiumhydrideplusonemoleculeofwaterproducesonemoleculeofhyrdogengasandonemoleculeofpotassiumhydroxideonemoleculeofpotassiumhydrideplus'.upper()
 
 # print(decrypt(text_2, key))
 # enc_text = decrypt(text, "HOUSE")
@@ -234,3 +238,34 @@ key = 'SIXMOLECULESOFSODIUMHYDROXIDEPLUSTHREEMOLECULESOFCHLORINEPRODUCESONEMOLEC
 #     tmp = decrypt(text, i)
 #     if f(tmp, keys):
 #         print([tmp, i])
+
+
+molecules = main.create_molecules()
+numbers = main.numbers
+
+# число molecule(s) of название молекулы(1-2 слова) plus число molecule(s) of название молекулы(1-2 слова) produces
+
+def hard_break(enc_text: str):
+    global molecules
+    global numbers
+    global keys
+
+    for j in molecules:
+        for k in numbers:
+            for l in molecules:
+                s1 = f"onemoleculeof{l}plus{k}moleculesof{j}produces"
+                s2 = f"onemoleculeof{l}plus{k}moleculeof{j}produces"
+                s3 = f"onemoleculeof{l}plus{k}moleculesof{j}produces"
+
+                tmp_1 = decrypt(enc_text, s1)
+                tmp_2 = decrypt(enc_text, s2)
+                tmp_3 = decrypt(enc_text, s3)
+
+                if f(tmp_1, keys):
+                    print([tmp_1, s1])
+                if f(tmp_2, keys):
+                    print([tmp_2, s2])
+                if f(tmp_3, keys):
+                    print([tmp_3, s3])
+
+hard_break(text_2)

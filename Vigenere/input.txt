@@ -1,0 +1,715 @@
+<table CELLSPACING="0" BORDER="1" cellpadding="4">
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">Z</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Символ</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Name</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Название</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">1</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">H</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Hydrogen</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Водород</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">2</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">He</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Helium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Гелий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">3</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Li</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Lithium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Литий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">4</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Be</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Beryllium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Бериллий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">5</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">B</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Boron</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Бор</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">6</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">C</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Carbon</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Углерод</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">7</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">N</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Nitrogen</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Азот</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">8</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">O</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Oxygen</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Кислород</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">9</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">F</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Fluorine</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Фтор</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">10</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ne</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Neon</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Неон</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">11</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Na</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Sodium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Натрий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">12</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Mg</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Magnesium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Магний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">13</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Al</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Aluminium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Алюминий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">14</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Si</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Silicon</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Кремний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">15</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">P</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Phosphorus</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Фосфор</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">16</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">S</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Sulfur</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Сера</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">17</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Cl</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Chlorine</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Хлор</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">18</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ar</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Argon</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Аргон</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">19</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">K</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Potassium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Калий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">20</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ca</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Calcium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Кальций</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">21</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Sc</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Scandium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Скандий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">22</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ti</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Titanium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Титан</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">23</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">V</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Vanadium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Ванадий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">24</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Cr</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Chromium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Хром</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">25</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Mn</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Manganese</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Марганец</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">26</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Fe</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Iron</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Железо</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">27</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Co</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Cobalt</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Кобальт</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">28</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ni</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Nickel</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Никель</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">29</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Cu</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Copper</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Медь</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">30</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Zn</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Zinc</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Цинк</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">31</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ga</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Gallium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Галлий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">32</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ge</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Germanium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Германий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">33</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">As</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Arsenic</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Мышьяк</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">34</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Se</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Selenium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Селен</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">35</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Br</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Bromine</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Бром</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">36</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Kr</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Krypton</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Криптон</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">37</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Rb</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Rubidium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Рубидий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">38</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Sr</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Strontium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Стронций</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">39</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Y</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Yttrium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Иттрий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">40</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Zr</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Zirconium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Цирконий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">41</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Nb</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Niobium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Ниобий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">42</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Mo</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Molybdenum</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Молибден</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">43</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Tc</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Technetium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Технеций</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">44</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ru</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Ruthenium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Рутений</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">45</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Rh</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Rhodium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Родий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">46</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Pd</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Palladium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Палладий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">47</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ag</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Silver</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Серебро</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">48</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Cd</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Cadmium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Кадмий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">49</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">In</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Indium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Индий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">50</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Sn</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Tin</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Олово</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">51</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Sb</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Antimony</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Сурьма</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">52</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Te</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Tellurium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Теллур</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">53</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">I</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Iodine</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Иод</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">54</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Xe</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Xenon</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Ксенон</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">55</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Cs</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Caesium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Цезий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">56</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ba</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Barium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Барий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">57</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">La</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Lanthanum</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Лантан</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">58</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ce</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Cerium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Церий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">59</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Pr</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Praseodymium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Празеодим</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">60</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Nd</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Neodymium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Неодим</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">61</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Pm</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Promethium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Прометий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">62</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Sm</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Samarium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Самарий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">63</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Eu</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Europium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Европий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">64</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Gd</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Gadolinium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Гадолиний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">65</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Tb</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Terbium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Тербий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">66</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Dy</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Dysprosium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Диспрозий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">67</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ho</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Holmium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Гольмий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">68</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Er</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Erbium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Эрбий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">69</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Tm</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Thulium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Тулий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">70</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Yb</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Ytterbium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Иттербий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">71</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Lu</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Lutetium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Лютеций</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">72</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Hf</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Hafnium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Гафний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">73</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ta</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Tantalum</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Тантал</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">74</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">W</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Tungsten</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Вольфрам</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">75</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Re</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Rhenium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Рений</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">76</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Os</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Osmium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Осмий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">77</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ir</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Iridium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Иридий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">78</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Pt</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Platinum</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Платина</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">79</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Au</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Gold</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Золото</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">80</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Hg</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Mercury</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Ртуть</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">81</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Tl</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Thallium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Таллий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">82</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Pb</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Lead</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Свинец</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">83</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Bi</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Bismuth</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Висмут</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">84</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Po</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Polonium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Полоний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">85</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">At</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Astatine</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Астат</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">86</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Rn</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Radon</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Радон</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">87</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Fr</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Francium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Франций</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">88</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ra</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Radium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Радий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">89</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ac</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Actinium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Актиний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">90</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Th</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Thorium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Торий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">91</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Pa</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Protactinium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Протактиний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">92</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">U</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Uranium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Уран</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">93</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Np</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Neptunium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Нептуний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">94</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Pu</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Plutonium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Плутоний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">95</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Am</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Americium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Америций</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">96</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Cm</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Curium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Кюрий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">97</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Bk</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Berkelium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Берклий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">98</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Cf</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Californium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Калифорний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">99</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Es</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Einsteinium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Эйнштейний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">100</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Fm</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Fermium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Фермий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">101</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Md</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Mendelevium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Менделевий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">102</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">No</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Nobelium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Нобелий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">103</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Lr</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Lawrencium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Лоуренсий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">104</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Rf</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Rutherfordium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Резерфордий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">105</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Db</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Dubnium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Дубний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">106</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Sg</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Seaborgium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Сиборгий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">107</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Bh</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Bohrium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Борий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">108</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Hs</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Hassium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Хассий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">109</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Mt</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Meitnerium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Мейтнерий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">110</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ds</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Darmstadtium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Дармштадтий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">111</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Rg</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Roentgenium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Рентгений</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">112</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Cn</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Copernicium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Коперници<span lang="ru">й</span></td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">113</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Nh</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Nihonium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Нихоний</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">114</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Fl</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Flerovium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE"><span lang="ru">Флеровий</span></td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">115</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Mc</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Moscovium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Московий</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">116</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Lv</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Livermorium</td>
+    <td WIDTH="35%" VALIGN="MIDDLE"><span lang="ru">Ливерморий</span></td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">117</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Ts</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Tennessine</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Теннессин</td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="MIDDLE">118</td>
+    <td WIDTH="16%" VALIGN="MIDDLE">Og</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Oganesson</td>
+    <td WIDTH="35%" VALIGN="MIDDLE">Оганессон</td>
+  </tr>
