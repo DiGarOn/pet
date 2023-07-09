@@ -14,3 +14,4 @@ def create_molecules():
     return molecules
 numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 
+print(create_molecules())
